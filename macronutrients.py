@@ -128,7 +128,7 @@ def calculate_macros_keep(metabolism_Basal, WEIGHT):
 
 
 
-if WEIGHT and TALL and DAYS >= 0 and ADGE and GENER not in ["hombre", "mujer"] and METHOD not in ["ganar", "perder", "mantener"]:
+if WEIGHT and TALL and DAYS >= 0 and ADGE and GENER.isalpha() and METHOD.isalpha():
     metabolism_Basal = calcuLate_metabolism_basal(WEIGHT, TALL, DAYS, ADGE ,GENER)
     if METHOD == "ganar":
         metabolism_Basal = int(metabolism_Basal + 500)
