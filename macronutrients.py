@@ -1,5 +1,5 @@
 
-WEIGHT = float(input("Escribe tu peso coporal en kg: "))
+WEIGHT = float(input("Escribe tu peso coporal en kg:       "))
 TALL = float(input("Escribe tu altura en centimetros: "))
 DAYS = int(input("Escribe la cantidad de días que entrenas a la semana:"))
 ADGE = int(input("Escribe tu edad: "))
