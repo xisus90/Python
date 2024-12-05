@@ -7,7 +7,7 @@ GENER = input("Escribe cual es tu genero (hombre/mujer): ")
 METHOD = input("Quieres ganar, perder o mantener el peso (ganar/perder/mantener): ")
 
 
-def calcuLate_metabolism_basal(WEIGHT, TALL, DAYS, ADGE ,GENER):
+def calcuLate_metabolism_basal():
     
     if GENER == "hombre":
         Man_Basal = (10 * WEIGHT) + (6.25 * TALL) - (5 * ADGE) + 5
@@ -60,7 +60,7 @@ def calcuLate_metabolism_basal(WEIGHT, TALL, DAYS, ADGE ,GENER):
             print("Una semana no tiene más de 7 días, coloca los días correctamente")
 
 
-def calculate_macros_gain(metabolism_Basal, WEIGHT):
+def calculate_macros_gain(metabolism_Basal):
     
     protein= 2.5 * WEIGHT
     calories_protein = protein * 4
@@ -83,7 +83,7 @@ def calculate_macros_gain(metabolism_Basal, WEIGHT):
     return protein, carbs, fats, calories_protein, calories_fats, calories_carbs
 
 
-def calculate_macros_lose(metabolism_Basal, WEIGHT):
+def calculate_macros_lose(metabolism_Basal):
     
     protein= 2 * WEIGHT
     calories_protein = protein * 4
@@ -105,7 +105,7 @@ def calculate_macros_lose(metabolism_Basal, WEIGHT):
     return protein, carbs, fats, calories_protein, calories_fats, calories_carbs
 
 
-def calculate_macros_keep(metabolism_Basal, WEIGHT):
+def calculate_macros_keep(metabolism_Basal):
        
     protein= 2.2 * WEIGHT
     calories_protein = protein * 4
@@ -127,28 +127,30 @@ def calculate_macros_keep(metabolism_Basal, WEIGHT):
     return protein, carbs, fats, calories_protein, calories_fats, calories_carbs
 
 
+def execute():
+    if WEIGHT and TALL and DAYS >= 0 and ADGE and GENER.isalpha() and METHOD.isalpha():
+        metabolism_Basal = calcuLate_metabolism_basal()
+        if METHOD == "ganar":
+            metabolism_Basal = int(metabolism_Basal + 500)
+            protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_gain(metabolism_Basal)     
+            print("las calorías recomendadas son: ", metabolism_Basal)
+            print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
+            print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
+            print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
+        if METHOD == "perder":
+            metabolism_Basal = metabolism_Basal - 500
+            protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_lose(metabolism_Basal)
+            print("las calorías recomendadas son: ", metabolism_Basal)
+            print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
+            print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
+            print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
+        if METHOD == "mantener":
+            protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_keep(metabolism_Basal)
+            print("las calorías recomendadas son: ", metabolism_Basal)
+            print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
+            print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
+            print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
+    else:
+        print("Debes rellenar todos los campos correctamente")
 
-if WEIGHT and TALL and DAYS >= 0 and ADGE and GENER.isalpha() and METHOD.isalpha():
-    metabolism_Basal = calcuLate_metabolism_basal(WEIGHT, TALL, DAYS, ADGE ,GENER)
-    if METHOD == "ganar":
-        metabolism_Basal = int(metabolism_Basal + 500)
-        protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_gain(metabolism_Basal, WEIGHT)     
-        print("las calorías recomendadas son: ", metabolism_Basal)
-        print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
-        print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
-        print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
-    if METHOD == "perder":
-        metabolism_Basal = metabolism_Basal - 500
-        protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_lose(metabolism_Basal, WEIGHT)
-        print("las calorías recomendadas son: ", metabolism_Basal)
-        print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
-        print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
-        print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
-    if METHOD == "mantener":
-        protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_keep(metabolism_Basal, WEIGHT)
-        print("las calorías recomendadas son: ", metabolism_Basal)
-        print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
-        print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
-        print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
-else:
-    print("Debes rellenar todos los campos correctamente")
+execute()
