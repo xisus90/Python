@@ -132,8 +132,7 @@ if WEIGHT and TALL and DAYS >= 0 and ADGE and GENER.isalpha() and METHOD.isalpha
     metabolism_Basal = calcuLate_metabolism_basal(WEIGHT, TALL, DAYS, ADGE ,GENER)
     if METHOD == "ganar":
         metabolism_Basal = int(metabolism_Basal + 500)
-        protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_gain(metabolism_Basal, WEIGHT)
-        print("estamos ganando peso")        
+        protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_gain(metabolism_Basal, WEIGHT)     
         print("las calorías recomendadas son: ", metabolism_Basal)
         print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
         print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
@@ -141,14 +140,12 @@ if WEIGHT and TALL and DAYS >= 0 and ADGE and GENER.isalpha() and METHOD.isalpha
     if METHOD == "perder":
         metabolism_Basal = metabolism_Basal - 500
         protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_lose(metabolism_Basal, WEIGHT)
-        print("estamos perdiendo peso")
         print("las calorías recomendadas son: ", metabolism_Basal)
         print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
         print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
         print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
     if METHOD == "mantener":
         protein, carbs, fats, calories_protein, calories_fats, calories_carbs = calculate_macros_keep(metabolism_Basal, WEIGHT)
-        print("estamos manteniendo peso")
         print("las calorías recomendadas son: ", metabolism_Basal)
         print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
         print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
