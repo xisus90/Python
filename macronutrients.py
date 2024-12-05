@@ -64,50 +64,59 @@ def calculate_macros_gain():
     
     metabolism_Basal = calcuLate_metabolism_basal()
     metabolism_Basal = metabolism_Basal + 500
-    protein = 2.5
-    protein, calories_protein, fats, calories_fats, calories_carbs, carbs = macronutrients(metabolism_Basal, protein)
+    protein_kg = 2.5
 
-    return protein, carbs, fats, calories_protein, calories_fats, calories_carbs, metabolism_Basal
+    return macronutrients(metabolism_Basal, protein_kg)
 
 
 def calculate_macros_lose():
     
     metabolism_Basal = calcuLate_metabolism_basal()
     metabolism_Basal = metabolism_Basal - 500
-    protein = 2
-    protein, calories_protein, fats, calories_fats, calories_carbs, carbs = macronutrients(metabolism_Basal, protein)
+    protein_kg = 2
 
-    return protein, carbs, fats, calories_protein, calories_fats, calories_carbs, metabolism_Basal
+    return macronutrients(metabolism_Basal, protein_kg)
 
 
 def calculate_macros_keep():
     
     metabolism_Basal = calcuLate_metabolism_basal()
-    protein = 2.2
-    protein, calories_protein, fats, calories_fats, calories_carbs, carbs = macronutrients(metabolism_Basal, protein)
+    protein_kg = 2.2
 
-    return protein, carbs, fats, calories_protein, calories_fats, calories_carbs , metabolism_Basal
+    return macronutrients(metabolism_Basal, protein_kg)
 
 
-def macronutrients(metabolism_Basal, protein):
+def calculate_protein_to_eat(protein_kg, weight):
+
+    return protein_kg * weight
+
+
+def calculate_calories_for_carbs(metabolism_Basal, calories_protein, calories_fats):
+    sum_prote_fats = calories_protein + calories_fats
+    sum_prote_fats = round(sum_prote_fats)
+    calories_carbs = metabolism_Basal - sum_prote_fats
+    return calories_carbs
+
+
+def macronutrients(metabolism_Basal, protein_kg):
     
-    proteins = proteins * WEIGHT
+    protein = calculate_protein_to_eat(protein_kg, WEIGHT)
     calories_protein = protein * 4
-    protein = round(protein)
     calories_protein = round(calories_protein)
 
-    fats = 1 * WEIGHT
+    fats = WEIGHT
     calories_fats = fats * 9
     fats = round(fats)
     calories_fats = round(calories_fats)
 
-    sum_prote_fats = calories_protein + calories_fats
-    sum_prote_fats = round(sum_prote_fats)
-    calories_carbs = metabolism_Basal - sum_prote_fats
+    calories_carbs = calculate_calories_for_carbs(metabolism_Basal, calories_protein, calories_fats)
     carbs = calories_carbs / 4
     calories_carbs = round(calories_carbs)
     carbs = round(carbs)
-    return protein,calories_protein,fats,calories_fats,calories_carbs,carbs
+
+    return round(protein),calories_protein,fats,calories_fats,calories_carbs,carbs, metabolism_Basal
+
+
 
 
 def execute():
