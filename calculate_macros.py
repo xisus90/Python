@@ -19,6 +19,13 @@ class CalculateMacros:
         self._gener = gener
         self._method = method
 
+    basal_days= [0, 1, 2, 3, 4, 5]
+    basal_days[0] = 1.2
+    basal_days[1] = 1.375
+    basal_days[2] = 1.55
+    basal_days[3] = 1.725
+    basal_days[4] = 1.9
+    basal_days[5] = 7
 
 #intentar dividir otra clase para calculos basal y otro el de calculate macros
 #intentar implementar los días con arrays
@@ -41,23 +48,23 @@ class CalculateMacros:
         basal_gener = self.calculate_basal_gener()
 
         if self._days == 0:
-            basal_gener = basal_gener * 1.2
+            basal_gener = basal_gener * self.basal_days[0]
             basal_gener = round(basal_gener)
             return basal_gener
         if 1 <= self._days <= 3:
-            basal_gener = basal_gener * 1.375
+            basal_gener = basal_gener * self.basal_days[1]
             basal_gener = round(basal_gener)
             return basal_gener
         if 4 <= self._days <=5:
-            basal_gener = basal_gener * 1.55
+            basal_gener = basal_gener * self.basal_days[2]
             basal_gener = round(basal_gener)
             return basal_gener
         if self._days == 6:
-            basal_gener = basal_gener * 1.725
+            basal_gener = basal_gener * self.basal_days[3]
             basal_gener = round(basal_gener)
             return basal_gener
         if self._days == 7:
-            basal_gener = basal_gener * 1.9
+            basal_gener = basal_gener * self.basal_days[4]
             basal_gener = round(basal_gener)
             return basal_gener
         if self._days > 7:
