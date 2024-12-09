@@ -2,6 +2,7 @@ from calculate_macros import CalculateMacros
 
 
 WEIGHT = float(input("Escribe tu peso coporal en kg: "))
+
 TALL = float(input("Escribe tu altura en centimetros: "))
 DAYS = int(input("Escribe la cantidad de días que entrenas a la semana:"))
 AGE = int(input("Escribe tu edad: "))

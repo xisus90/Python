@@ -27,9 +27,8 @@ class CalculateMacros:
     basal_days[4] = 1.9
     basal_days[5] = 7
 
-#intentar dividir otra clase para calculos basal y otro el de calculate macros
+
 #intentar implementar los días con arrays
-#meter todas las comprobaciones en una funcion y solo la operación de hombre y mujer en una funcion
 #meter lo de hombre y mujer a enumerados y ganar, perder y permanecer
 
     def calculate_basal_gener(self):
