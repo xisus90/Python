@@ -24,57 +24,44 @@ class CalculateMacros:
 #intentar implementar los días con arrays
 #meter todas las comprobaciones en una funcion y solo la operación de hombre y mujer en una funcion
 #meter lo de hombre y mujer a enumerados y ganar, perder y permanecer
-    def calcuLate_metabolism_basal(self):
+
+    def calculate_basal_gener(self):
         
         if self._gener == "hombre":
-            Man_Basal = (10 * self._weith) + (6.25 * self._tall) - (5 * self._age) + 5
-            if self._days == 0:
-                Man_Basal = Man_Basal * 1.2
-                Man_Basal = round(Man_Basal)
-                return Man_Basal
-            if 1 <= self._days <= 3:
-                Man_Basal = Man_Basal * 1.375
-                Man_Basal = round(Man_Basal)
-                return Man_Basal
-            if 4 <= self._days <=5:
-                Man_Basal = Man_Basal * 1.55
-                Man_Basal = round(Man_Basal)
-                return Man_Basal
-            if self._days == 6:
-                Man_Basal = Man_Basal * 1.725
-                Man_Basal = round(Man_Basal)
-                return Man_Basal
-            if self._days == 7:
-                Man_Basal = Man_Basal * 1.9
-                Man_Basal = round(Man_Basal)
-                return Man_Basal
-            if self._days > 7:
-                print("Una semana no tiene más de 7 días, coloca los días correctamente")
-
+            basal = (10 * self._weith) + (6.25 * self._tall) - (5 * self._age) + 5
+            return basal
+        
         if self._gener == "mujer":
-            Woman_Basal = (10 * self._weith) + (6.25 * self._tall) - (5 * self._age) - 161
-            if self._days == 0:
-                Woman_Basal = Woman_Basal * 1.2
-                Woman_Basal = round(Woman_Basal)
-                return Woman_Basal
-            if 1 <= self._days <= 3:
-                Woman_Basal = Woman_Basal * 1.375
-                Woman_Basal = round(Woman_Basal)
-                return Woman_Basal
-            if 4 <= self._days <=5:
-                Woman_Basal = Woman_Basal * 1.55
-                Woman_Basal = round(Woman_Basal)
-                return Woman_Basal
-            if self._days == 6:
-                Woman_Basal = Woman_Basal * 1.725
-                Woman_Basal = round(Woman_Basal)
-                return Woman_Basal
-            if self._days == 7:
-                Woman_Basal = Woman_Basal * 1.9
-                Woman_Basal = round(Woman_Basal)
-                return Woman_Basal
-            if self._days > 7:
-                print("Una semana no tiene más de 7 días, coloca los días correctamente")
+            basal = (10 * self._weith) + (6.25 * self._tall) - (5 * self._age) - 161
+            return basal
+
+
+    def calcuLate_metabolism_basal(self):
+        
+        basal_gener = self.calculate_basal_gener()
+
+        if self._days == 0:
+            basal_gener = basal_gener * 1.2
+            basal_gener = round(basal_gener)
+            return basal_gener
+        if 1 <= self._days <= 3:
+            basal_gener = basal_gener * 1.375
+            basal_gener = round(basal_gener)
+            return basal_gener
+        if 4 <= self._days <=5:
+            basal_gener = basal_gener * 1.55
+            basal_gener = round(basal_gener)
+            return basal_gener
+        if self._days == 6:
+            basal_gener = basal_gener * 1.725
+            basal_gener = round(basal_gener)
+            return basal_gener
+        if self._days == 7:
+            basal_gener = basal_gener * 1.9
+            basal_gener = round(basal_gener)
+            return basal_gener
+        if self._days > 7:
+            print("Una semana no tiene más de 7 días, coloca los días correctamente")
 
 
     def calculate_macros_gain(self):
