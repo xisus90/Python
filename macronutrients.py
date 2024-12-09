@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 
 WEIGHT = float(input("Escribe tu peso coporal en kg: "))
 TALL = float(input("Escribe tu altura en centimetros: "))
@@ -5,6 +6,15 @@ DAYS = int(input("Escribe la cantidad de días que entrenas a la semana:"))
 ADGE = int(input("Escribe tu edad: "))
 GENER = input("Escribe cual es tu genero (hombre/mujer): ")
 METHOD = input("Quieres ganar, perder o mantener el peso (ganar/perder/mantener): ")
+@dataclass 
+class CalculateMacronutrients():
+    protein: int
+    carbs: int
+    fats: int
+    calories_protein: int
+    calories_fats: int
+    calories_carbs: int
+    metabolism_Basal: int
 
 
 def calcuLate_metabolism_basal():
@@ -114,25 +124,32 @@ def macronutrients(metabolism_Basal, protein_kg):
     calories_carbs = round(calories_carbs)
     carbs = round(carbs)
 
-    return round(protein),calories_protein,fats,calories_fats,calories_carbs,carbs, metabolism_Basal
-
-
+    #return round(protein),calories_protein,fats,calories_fats,calories_carbs,carbs, metabolism_Basal
+    return CalculateMacronutrients(
+        protein=round(protein),
+        calories_protein= calories_protein,
+        fats = fats,
+        calories_fats = calories_fats,
+        calories_carbs = calories_carbs,
+        carbs = carbs,
+        metabolism_Basal = metabolism_Basal
+        )
 
 
 def execute():
     
     if METHOD == "ganar":
-        protein, carbs, fats, calories_protein, calories_fats, calories_carbs, metabolism_Basal = calculate_macros_gain()     
+        macronutrients = calculate_macros_gain()     
         
     if METHOD == "perder":
-        protein, carbs, fats, calories_protein, calories_fats, calories_carbs, metabolism_Basal = calculate_macros_lose()
+        macronutrients = calculate_macros_lose()
        
     if METHOD == "mantener":
-        protein, carbs, fats, calories_protein, calories_fats, calories_carbs, metabolism_Basal = calculate_macros_keep()
+        macronutrients = calculate_macros_keep()
 
-    print("las calorías recomendadas son: ", metabolism_Basal)
-    print("los gramos de proteinas recomendables son: ",protein,"gr con unas calorias de proteinas de ", calories_protein )
-    print("los gramos de grasas saludables recomendables son: ",fats,"gr con unas calorias de grasas de ", calories_fats )
-    print("los gramos de carbohidratos recomendables son: ",carbs,"gr con unas calorias de carbohidratos de ", calories_carbs )
+    print("las calorías recomendadas son: ", macronutrients.metabolism_Basal)
+    print("los gramos de proteinas recomendables son: ",macronutrients.protein,"gr con unas calorias de proteinas de ", macronutrients.calories_protein )
+    print("los gramos de grasas saludables recomendables son: ",macronutrients.fats,"gr con unas calorias de grasas de ", macronutrients.calories_fats )
+    print("los gramos de carbohidratos recomendables son: ",macronutrients.carbs,"gr con unas calorias de carbohidratos de ", macronutrients.calories_carbs )
 
 execute()
