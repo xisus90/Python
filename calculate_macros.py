@@ -19,13 +19,7 @@ class CalculateMacros:
         self._gener = gener
         self._method = method
 
-    basal_days= [0, 1, 2, 3, 4, 5]
-    basal_days[0] = 1.2
-    basal_days[1] = 1.375
-    basal_days[2] = 1.55
-    basal_days[3] = 1.725
-    basal_days[4] = 1.9
-    basal_days[5] = 7
+    basal_days = [1.2, 1.375, 1.55, 1.725, 1.9]
 
 
 #intentar implementar los días con arrays
@@ -68,6 +62,7 @@ class CalculateMacros:
             return basal_gener
         if self._days > 7:
             print("Una semana no tiene más de 7 días, coloca los días correctamente")
+            exit()
 
 
     def calculate_macros_gain(self):
