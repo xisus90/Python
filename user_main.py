@@ -54,4 +54,4 @@ print("los gramos de carbohidratos recomendables son: ",macronutrients.carbs,"gr
 
 #buscar algo acerca de excepcions en python 
 #principios solid estudiarlos por encima
-#open close--> abierto al cambio 
+ 

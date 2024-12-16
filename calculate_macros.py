@@ -19,11 +19,8 @@ class CalculateMacros:
         self._gener = gener
         self._method = method
 
-    #basal_days = [1.2, 1.375, 1.55, 1.725, 1.9]
     basal_days = [1.2, 1.375, 1.375, 1.375, 1.55, 1.55, 1.725, 1.9]
 
-#intentar implementar los días con arrays
-#meter lo de hombre y mujer a enumerados y ganar, perder y permanecer
 
     def calculate_basal_gener(self):
         
