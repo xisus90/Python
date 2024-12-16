@@ -19,8 +19,8 @@ class CalculateMacros:
         self._gener = gener
         self._method = method
 
-    basal_days = [1.2, 1.375, 1.55, 1.725, 1.9]
-
+    #basal_days = [1.2, 1.375, 1.55, 1.725, 1.9]
+    basal_days = [1.2, 1.375, 1.375, 1.375, 1.55, 1.55, 1.725, 1.9]
 
 #intentar implementar los días con arrays
 #meter lo de hombre y mujer a enumerados y ganar, perder y permanecer
@@ -40,24 +40,8 @@ class CalculateMacros:
         
         basal_gener = self.calculate_basal_gener()
 
-        if self._days == 0:
-            basal_gener = basal_gener * self.basal_days[0]
-            basal_gener = round(basal_gener)
-            return basal_gener
-        if 1 <= self._days <= 3:
-            basal_gener = basal_gener * self.basal_days[1]
-            basal_gener = round(basal_gener)
-            return basal_gener
-        if 4 <= self._days <=5:
-            basal_gener = basal_gener * self.basal_days[2]
-            basal_gener = round(basal_gener)
-            return basal_gener
-        if self._days == 6:
-            basal_gener = basal_gener * self.basal_days[3]
-            basal_gener = round(basal_gener)
-            return basal_gener
-        if self._days == 7:
-            basal_gener = basal_gener * self.basal_days[4]
+        if 0 <= self._days <= 7:
+            basal_gener = basal_gener * self.basal_days[self._days]
             basal_gener = round(basal_gener)
             return basal_gener
         if self._days > 7:
