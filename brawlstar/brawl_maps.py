@@ -24,7 +24,7 @@ class BrawlSearch:
         position = 0
         while position <= (len(brawlerList)):
             if brawlerList[position] == self._brawler :
-                goodmap = MapSearch(brawlerList[position], position).MapList()
+                goodmap = MapSearch(brawlerList[position]).MapList()
                 return goodmap
             position += 1
 
@@ -32,15 +32,22 @@ class BrawlSearch:
 
 class MapSearch:
 
-    def __init__(self, brawlerList, position):
+    def __init__(self, brawlerList):
         self._brawlerList = brawlerList
-        self._position = position
 
     def MapList(self):
         
-        print(f"el brwaler {self._brawlerList} está en la posición {self._position} de la array")
-        prueba = "todo ok"
-        return prueba
+        maplist= {
+                "Penny": "Mina rocosa, Arcade de cristal, Espacio abierto",
+                "Pam": "Brrumm Brrumm, Ultima parada",
+                "Crow": "Claro del bosque, Avalancha Rocosa",
+                "Leo":"Pradera traicionera, Escondite",
+                "Ivy":"Canal grande, Crimen organizado"          
+               }
+        brawl_map = maplist[self._brawlerList]
+             
+        return brawl_map
+
         
 
 
