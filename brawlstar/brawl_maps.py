@@ -9,9 +9,8 @@ class mapsforbrawler:
 
 
     def execute(self):
-        brawl_maps = BrawlSearch(self._brawler).brawlersList()
+        brawl_maps = BrawlSearch(self._brawler).brawler()
         return brawl_maps    
-
 
 
 class BrawlSearch:
@@ -19,17 +18,26 @@ class BrawlSearch:
     def __init__(self, brawler):
             self._brawler = brawler
     
+
     def brawlersList(self):
+
         brawlerList = ["Penny", "Pam", "Crow", "Leo", "Ivy"]
         position = 0
+
         while position <= (len(brawlerList)):
             if brawlerList[position] == self._brawler :
-                goodmap = MapSearch(brawlerList[position]).MapList()
-                return goodmap
+                idbrawler = brawlerList[position]
+                return idbrawler
             position += 1
 
+            
+    def brawler(self):
 
+        choosedbrawler = self.brawlersList()
+        goodmap = MapSearch(choosedbrawler).MapList()
+        return goodmap
 
+        
 class MapSearch:
 
     def __init__(self, brawlerList):
