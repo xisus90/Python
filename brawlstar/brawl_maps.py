@@ -5,33 +5,42 @@ from dataclasses import dataclass
 class mapsforbrawler:
  
     def __init__(self, brawler):       
-            self.brawlers = brawler
+            self._brawler = brawler
 
 
     def execute(self):
-        brawler_maps = self.brawlersList()
-        return brawler_maps    
+        brawl_maps = BrawlSearch(self._brawler).brawlersList()
+        return brawl_maps    
 
 
 
-#class BrawlSearch:
-
+class BrawlSearch:
     
-    def brawlersList(self, brawlid):
-        brawlers = ["Penny", "Pam", "Crow", "Leo", "Ivy"]
+    def __init__(self, brawler):
+            self._brawler = brawler
+    
+    def brawlersList(self):
+        brawlerList = ["Penny", "Pam", "Crow", "Leo", "Ivy"]
         position = 0
-        while position <= (len(brawlers)):
-            if brawlers[position] == brawlid:
-                goodmap = self.MapList(brawlers[position])
+        while position <= (len(brawlerList)):
+            if brawlerList[position] == self._brawler :
+                goodmap = MapSearch(brawlerList[position], position).MapList()
                 return goodmap
             position += 1
 
 
 
-#class MapSearch:
+class MapSearch:
 
-    def MapList(self, brawlers):
+    def __init__(self, brawlerList, position):
+        self._brawlerList = brawlerList
+        self._position = position
+
+    def MapList(self):
         
-        pass
+        print(f"el brwaler {self._brawlerList} está en la posición {self._position} de la array")
+        prueba = "todo ok"
+        return prueba
+        
 
 
