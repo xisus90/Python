@@ -1,11 +1,8 @@
 from brawl_maps import mapsforbrawler
 
 
-try:
-   Brawler = input("Introduce un Brawler y se imprimiran sus mejores mapas: ")
-except ValueError:
-    print("El campo del peso no está definido o es inválido.")
-    exit()
+Brawler = input("Introduce un Brawler y se imprimiran sus mejores mapas: ")
+
 
 
 

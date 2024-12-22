@@ -1,5 +1,8 @@
+import re
 from dataclasses import dataclass
-@dataclass 
+import requests
+@dataclass
+ 
 
 
 class mapsforbrawler:
@@ -9,31 +12,38 @@ class mapsforbrawler:
 
 
     def execute(self):
+        brawler_exists = BrawlersDataMemory().exists(self._brawler)
+        if not brawler_exists:
+            return "No existe brawler"
 
-        brawl_checked = Brawlercheking(self._brawler).brawlersList()
-        goodmap = MapSearch(brawl_checked).MapList()
+        goodmap = MapSearch(self._brawler).MapList()
         return goodmap    
 
 
-class Brawlercheking:
+class BrawlersDataMemory:
     
-    def __init__(self, brawler):       
-        self._brawler = brawler
- 
+    def __init__(self):
+        self._brawlerList = ["Penny", "Pam", "Crow", "Leo", "Ivy"]
+
+    def get_brawlers(self):
+        return self._brawlerList
+
+    def exists(self, brawler):
+        return brawler in self._brawlerList
+
+
+class BrawlersDataWeb:
     
+    def __init__(self):
+        self._brawlerList = ["Penny", "Pam", "Crow", "Leo", "Ivy"]
 
-    def brawlersList(self):
+    def get_brawlers(self):
+        return self._brawlerList
 
-        brawlerList = ["Penny", "Pam", "Crow", "Leo", "Ivy"]
-        position = 0
+    def exists(self, brawler):
+        return brawler in self._brawlerList
 
-        while position <= (len(brawlerList)):
-            if brawlerList[position] == self._brawler :
-                idbrawler = brawlerList[position]
-                return idbrawler
-            position += 1
 
-        
 class MapSearch:
 
     def __init__(self, brawlerList):
