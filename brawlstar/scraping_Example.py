@@ -15,4 +15,4 @@ data_brawlers = []
 
 for i in datas:
     data_brawlers.append(i)
-    
+    print(i)
