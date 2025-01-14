@@ -1,6 +1,6 @@
 import re
 import requests
-
+#from bs4 import BeautifulSoup
 
 
 class SearchGame:
@@ -12,7 +12,7 @@ class SearchGame:
     def search(self):
 
         search_platform = LookingDataPlatform(self._platform).looking_platforms()
-        price_game = SearchPrice(self._game, search_platform).Lookingdataprice
+        price_game = SearchPrice(self._game, search_platform).Lookingdataprice()
         return price_game
         
 
@@ -51,5 +51,5 @@ class SearchPrice():
             data_url = f"{self._platform}{self._game}"
             result = requests.get(data_url)
             content = result.text
-            
-            return content 
+            return content
+             
