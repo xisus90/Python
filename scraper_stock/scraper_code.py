@@ -1,13 +1,13 @@
 import re
-from dataclasses import dataclass
 import requests
+
+
 
 class SearchGame:
 
-    def __init__(self, game, platform):   
-
-        self._game = game
-        self._platform = platform
+    def __init__(self, game, platform):       
+            self._game = game
+            self._platform = platform
 
     def search(self):
 
