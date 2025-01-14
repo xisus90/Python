@@ -2,7 +2,6 @@ import re
 import requests
 
  
-
 class mapsforbrawler:
  
     def __init__(self, brawler):       
