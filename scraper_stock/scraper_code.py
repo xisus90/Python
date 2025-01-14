@@ -11,10 +11,12 @@ class SearchGame:
 
     def search(self):
 
-        search_platform = LookingDataPlatform().looking_platforms(self._platform)
-        #price_game = SearchPrice(self._search_platform)
-        return search_platform
+        search_platform = LookingDataPlatform(self._platform).looking_platforms()
+        price_game = SearchPrice(self._game, search_platform).Lookingdataprice
+        return price_game
         
+
+
 class LookingDataPlatform:
         
     def __init__(self, platform):
@@ -38,14 +40,18 @@ class LookingDataPlatform:
         return platform_link
 
 
-#class SearchPrice():
+
+class SearchPrice():
         
-#        def __init__(self):
-#            data_url = ""
-#            result = requests.get(data_url)
-#            content = result.text
-#            print (content)
-            #data_sequence = r'h6 mb-0">(.*?)</h2>'
+        def __init__(self, game, platform):
+             self._game = game
+             self._platform = platform
+
+        def Lookingdataprice(self):
+            data_url = f"{self._platform}{self._game}"
+            result = requests.get(data_url)
+            content = result.text
+            return content
             #datas = re.findall(data_sequence, str(content))
 
             #self._data_brawlers = []
