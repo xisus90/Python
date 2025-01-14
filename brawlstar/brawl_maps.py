@@ -15,7 +15,7 @@ class mapsforbrawler:
 
         brawler_Web_exists = BrawlersDataWeb().exists(self._brawler)
         if not brawler_Web_exists:
-            return "No existe brawler en data memory"
+        return "No existe brawler en data memory"
 
         goodmap = MapSearch(self._brawler).MapList()
         return goodmap    
