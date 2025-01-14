@@ -51,12 +51,5 @@ class SearchPrice():
             data_url = f"{self._platform}{self._game}"
             result = requests.get(data_url)
             content = result.text
-            return content
-            #datas = re.findall(data_sequence, str(content))
-
-            #self._data_brawlers = []
-
-            #for i in datas:
-            #    self._data_brawlers.append(i
-
-            #pass  
+            
+            return content 
