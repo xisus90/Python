@@ -1,9 +1,7 @@
 import re
-from dataclasses import dataclass
 import requests
-@dataclass
- 
 
+ 
 
 class mapsforbrawler:
  
@@ -12,9 +10,7 @@ class mapsforbrawler:
 
 
     def execute(self):
-        #brawler_Memory_exists = BrawlersDataMemory().exists(self._brawler)
-        #if not brawler_Memory_exists:
-        #return "No existe brawler en data memory"
+
         brawler_Web_exists = BrawlersDataWeb().exists(self._brawler)
         if not brawler_Web_exists:
             return "No existe brawler en data memory"
