@@ -7,14 +7,33 @@ class Database:
     
     def __init__(self):
         
-        self.connection = pymysql.connector.connect(
+        self._connection = pymysql.connect(
         host="localhost", 
         user="root",
         password="root",
         db="gamelist"
         )
+        
+        if self._connection():
+            print("Conexión exitosa a MySQL")
 
-        self.cursor = self.connection.cursor()
+        self._cursor = self._connection.cursor()
+
+
+    def data_db(self, gametitle, gameprice):
+        self._cursor.execute("""
+            INSERT INTO games ( Gamesnames, Gamesprice)
+            VALUES (%s, %s)
+            """, (gametitle, gameprice))
+
+        # Confirmar los cambios en la base de datos
+        self._connection.commit()
+        print("datos insertados correctamente")
+        
+    self._cursor.close()
+    self._connection.close()
+    print("conexion cerrada")
+
 
 
 class SearchGame:
@@ -26,6 +45,7 @@ class SearchGame:
     def search(self):
    
         price_game = self.Lookingdataprice()
+        insertdb = Database().data_db(self._data_titles, self._data_prices)
         return price_game
 
 
@@ -54,11 +74,9 @@ class SearchGame:
                 cleaned_price_text = ' '.join(price_text)
                 self._data_prices.append(cleaned_price_text)   
 
-            length = 0 
-            while length <= len(self._data_titles)-1:
-                print(f"{self._data_titles[length]} --> {self._data_prices[length]}€")
-                length+=1
+            lenght = 0 
+            while lenght <= len(self._data_titles)-1:
+                print(f"{self._data_titles[lenght]} --> {self._data_prices[lenght]}€")
+                lenght+=1
 
-    def data_db(self):
 
-        pass
