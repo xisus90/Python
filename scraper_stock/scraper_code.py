@@ -14,18 +14,19 @@ class Database:
         db="gamelist"
         )
         
-        if self._connection():
-            print("Conexión exitosa a MySQL")
-
         self._cursor = self._connection.cursor()
 
 
     def data_db(self, gametitle, gameprice):
-        
-        self._cursor.execute("""
-            INSERT INTO games ( Gamesnames, Gamesprice)
+
+ 
+
+        data_to_insert = list(zip(gametitle, gameprice))
+
+        self._cursor.executemany("""
+            INSERT INTO games ( Gamesnames, Gamesprices)
             VALUES (%s, %s)
-            """, (gametitle, gameprice))
+            """, (data_to_insert))
 
         # Confirmar los cambios en la base de datos
         self._connection.commit()
@@ -39,15 +40,15 @@ class Database:
 
 class SearchGame:
 
-    def __init__(self, game):       
-            self._game = game
+    #def __init__(self, game):       
+    #        self._game = game
 
 
     def search(self):
    
         price_game = self.Lookingdataprice()
         insertdb = Database().data_db(self._data_titles, self._data_prices)
-        return price_game
+        return insertdb
 
 
     def Lookingdataprice(self):
