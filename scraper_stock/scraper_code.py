@@ -21,6 +21,7 @@ class Database:
 
 
     def data_db(self, gametitle, gameprice):
+        
         self._cursor.execute("""
             INSERT INTO games ( Gamesnames, Gamesprice)
             VALUES (%s, %s)
@@ -30,9 +31,9 @@ class Database:
         self._connection.commit()
         print("datos insertados correctamente")
         
-    self._cursor.close()
-    self._connection.close()
-    print("conexion cerrada")
+        self._cursor.close()
+        self._connection.close()
+        print("conexion cerrada")
 
 
 
