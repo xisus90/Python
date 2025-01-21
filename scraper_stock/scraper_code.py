@@ -19,14 +19,12 @@ class Database:
 
     def data_db(self, gametitle, gameprice):
 
- 
-
         data_to_insert = list(zip(gametitle, gameprice))
 
         self._cursor.executemany("""
             INSERT INTO games ( Gamesnames, Gamesprices)
             VALUES (%s, %s)
-            """, (data_to_insert))
+            """, data_to_insert)
 
         # Confirmar los cambios en la base de datos
         self._connection.commit()
@@ -37,20 +35,18 @@ class Database:
         print("conexion cerrada")
 
 
+class ScarpGames:
 
-class SearchGame:
-
-    #def __init__(self, game):       
-    #        self._game = game
-
+    def __init__(self):
+        
+            self._data_titles = []
+            self._data_prices = []
 
     def search(self):
    
         price_game = self.Lookingdataprice()
         insertdb = Database().data_db(self._data_titles, self._data_prices)
-        return insertdb
-
-
+        
     def Lookingdataprice(self):
  
         data_url = "https://www.dlcompare.es/juegos"
@@ -62,9 +58,6 @@ class SearchGame:
             
             game_titles = filter.find_all('span', {'class':'name'})
             game_prices = filter.find_all('span', {'class': 'price'})
-
-            self._data_titles = []
-            self._data_prices = []
 
             for game_title in game_titles:
                 game_text = game_title.text.split()
@@ -82,3 +75,4 @@ class SearchGame:
                 lenght+=1
 
 
+ScarpGames().search()
