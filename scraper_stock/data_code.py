@@ -1,4 +1,5 @@
 import pymysql
+import csv
 
 class Database:
     
@@ -18,27 +19,36 @@ class Database:
         
         self._cursor.execute("SELECT Gamesprices FROM games WHERE Gamesnames = %s", (game))
         result = self._cursor.fetchone()
+
         if result:
             return result[0]  # Devuelve el valor del precio (primera columna)
         else:
             print("El juego que buscas no existe")
             exit()
+        
+        self._cursor.close()
+        self._connection.close()
 
-    def compare(self, game):
 
-        self._cursor.execute("""SELECT Gamesprices 
-                             FROM games
-                             WHERE Gamesnames = %s
-                             and Date = (SELECT min(Date))""", (game,))
-        result = self._cursor.fetchone()
-        if result:
-            return result[0]  # Devuelve el valor del precio (primera columna)
-        else:
-            print("El juego que buscas no existe")
-            exit()       
+    def grafic(self):
+
+        self._cursor.execute("SELECT Gamesnames, Gamesprices, Date From games")
+        result = self._cursor.fetchall()
+        
+        with open("exported_data.csv", mode="w", newline="") as datafile:
+            writer = csv.writer(datafile)
+        
+            writer.writerow(["Gamesnames", "Gamesprices", "Date"])
+        
+            for fila in result:
+             writer.writerow(fila)
+    
+        print("Datos exportados correctamente a 'exported_data.csv'")
+            
 
         self._cursor.close()
         self._connection.close()
+
 
 class datas_games:
 
@@ -46,8 +56,3 @@ class datas_games:
 
         gameprice = Database().findprice(game)
         return gameprice
-    
-    def compareprices(self, game):
-        
-        pricestocompare = Database().compare(game)
-        return pricestocompare
