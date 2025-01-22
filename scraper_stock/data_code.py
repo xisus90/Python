@@ -16,14 +16,27 @@ class Database:
 
     def findprice(self, game):
         
-        self._cursor.execute("SELECT Gamesprices FROM games WHERE Gamesnames = %s", (game,))
+        self._cursor.execute("SELECT Gamesprices FROM games WHERE Gamesnames = %s", (game))
         result = self._cursor.fetchone()
         if result:
             return result[0]  # Devuelve el valor del precio (primera columna)
         else:
             print("El juego que buscas no existe")
             exit()
-            
+
+    def compare(self, game):
+
+        self._cursor.execute("""SELECT Gamesprices 
+                             FROM games
+                             WHERE Gamesnames = %s
+                             and Date = (SELECT min(Date))""", (game,))
+        result = self._cursor.fetchone()
+        if result:
+            return result[0]  # Devuelve el valor del precio (primera columna)
+        else:
+            print("El juego que buscas no existe")
+            exit()       
+
         self._cursor.close()
         self._connection.close()
 
@@ -33,3 +46,8 @@ class datas_games:
 
         gameprice = Database().findprice(game)
         return gameprice
+    
+    def compareprices(self, game):
+        
+        pricestocompare = Database().compare(game)
+        return pricestocompare

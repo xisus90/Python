@@ -2,6 +2,7 @@ import re
 import pymysql
 import requests
 from bs4 import BeautifulSoup
+from datetime import date
 
 class Database:
     
@@ -19,11 +20,12 @@ class Database:
 
     def data_db(self, gametitle, gameprice):
 
-        data_to_insert = list(zip(gametitle, gameprice))
-
+        actual_date = date.today()
+        data_to_insert = [(title, price, actual_date) for title, price in zip(gametitle, gameprice)]
+        
         self._cursor.executemany("""
-            INSERT INTO games ( Gamesnames, Gamesprices)
-            VALUES (%s, %s)
+            INSERT IGNORE INTO games ( Gamesnames, Gamesprices, Date)
+            VALUES (%s, %s, %s)
             """, data_to_insert)
 
         # Confirmar los cambios en la base de datos
@@ -32,8 +34,6 @@ class Database:
         
         self._cursor.close()
         self._connection.close()
-        print("conexion cerrada")
-
 
 class ScarpGames:
 
@@ -69,10 +69,6 @@ class ScarpGames:
                 cleaned_price_text = ' '.join(price_text)
                 self._data_prices.append(cleaned_price_text)   
 
-            lenght = 0 
-            while lenght <= len(self._data_titles)-1:
-                print(f"{self._data_titles[lenght]} --> {self._data_prices[lenght]}€")
-                lenght+=1
 
 
 ScarpGames().search()
