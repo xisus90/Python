@@ -20,18 +20,40 @@ class Database:
 
     def data_db(self, gametitle, gameprice):
 
-        actual_date = date.today()
-        data_to_insert = [(title, price, actual_date) for title, price in zip(gametitle, gameprice)]
+        #actual_date = date.today()
+        #data_to_insert = [(title, price, actual_date) for title, price in zip(gametitle, gameprice)]
         
-        self._cursor.executemany("""
-            INSERT IGNORE INTO games ( Gamesnames, Gamesprices, Date)
-            VALUES (%s, %s, %s)
-            """, data_to_insert)
+        #self._cursor.executemany("""
+        #    INSERT IGNORE INTO games ( Gamesnames, Gamesprices, Date)
+        #    VALUES (%s, %s, %s)
+        #    """, data_to_insert)
 
-        # Confirmar los cambios en la base de datos
-        self._connection.commit()
-        print("datos insertados correctamente")
-        
+        #self._connection.commit()
+        #print("datos insertados correctamente")
+
+        self._cursor.execute(" SELECT Gamesnames, Gamesprices, date FROM games ")
+        results = self._cursor.fetchall()
+
+
+        gameprice = [float(price) for price in gameprice]
+
+        min_length = min(len(results), len(gameprice))
+
+        for i in range(min_length):
+
+            db_price = float(results[i][1])
+
+            if db_price < gameprice[i]:
+                print (f"el juego {gametitle[i]} tiene un precio menor\n el precio actual es {gameprice[i]}€ y el precio anterior es {db_price}€")
+            if db_price == gameprice[i]:
+                print (f"el precio del juego {gametitle[i]} es igual")
+
+            
+
+     
+
+
+
         self._cursor.close()
         self._connection.close()
 
