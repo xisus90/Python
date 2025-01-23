@@ -48,11 +48,6 @@ class Database:
             if db_price == gameprice[i]:
                 print (f"el precio del juego {gametitle[i]} es igual")
 
-            
-
-     
-
-
 
         self._cursor.close()
         self._connection.close()
@@ -66,8 +61,8 @@ class ScarpGames:
 
     def search(self):
    
-        price_game = self.Lookingdataprice()
-        insertdb = Database().data_db(self._data_titles, self._data_prices)
+        self.Lookingdataprice()
+        Database().data_db(self._data_titles, self._data_prices)
         
     def Lookingdataprice(self):
  

@@ -21,8 +21,6 @@ class Database:
         self._cursor.execute("SELECT Gamesprices FROM games WHERE Gamesnames = %s", (game))
         result = self._cursor.fetchone()
 
-        print(result)
-
         if result:
             return result[0] 
         else:
@@ -65,17 +63,15 @@ class Database:
         self._cursor.close()
         self._connection.close()
 
+
     def get_game_for_user(self, user):
         
         user = user.strip().lower()
         self._cursor.execute("SELECT GameName FROM users WHERE NameUser = %s", (user,))
         result = self._cursor.fetchone()
 
-        print(result) # esto me devuelve el nombre sin tratar como ('Atomfall',)
-
-
         if result:
-            return result[0] #esto me devuelve None
+            return result[0] 
         else:
             print("El juego que buscas no existe")
             exit()
@@ -84,17 +80,25 @@ class Database:
         self._connection.close()
 
 
-class Suscription():
+class Suscription:
 
     def suscription(self, user, mail, game):
         
+        #para mañana hacer una función que se encargue de mostrar solo los juegos de los subscritos
+        #hacer otra función que se encargue de comprobar si estas registrado y si no lo estas
+        #subscribirte y una tercera que se encargue de actualizar los datos de una tabla si estas en
+        # la db, para colocar el nuevo juego al que te has subscrito
+        # y en scraper_code que llame a este documento y mande un correo a la persona cuando compruebe
+        #que un juego ha bajado de precio
+        #modificar en el user, cuando te dice que te suscribas por primera vez y la funcion nueva se
+        #llame newuser, la de buscar en la db, searchdb o similar, y la de actualizar updateuserdb
         Database().user_db(user, mail, game)
-        return
+        Database().user_update(game)
     
     def suscriptorgames(self, name):
 
-        Database().get_game_for_user(name)
-
+        gamename = Database().get_game_for_user(name)
+        return gamename
 
 
 class datas_games:

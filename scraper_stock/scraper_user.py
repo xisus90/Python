@@ -4,14 +4,57 @@ from data_code import Suscription
 
 class users():
      
-     def user(self):
+    def user_search(self, name, mail):
+
+        try:
+            game = input(f"¿Escribe el nombre del juego que deseas buscar? ")
+            gameprice = Database().findprice(game)
+        except ValueError:
+                    print("No se ha escrito nada en el valor nombre")
+        print (f"el juego es {game} tiene un precio de {gameprice}€")
+
+        while True:
+            try:
+                option = input(f"¿Deseas suscribirte al juego? ")
+
+                if not option.strip():  # Si no se escribe nada (cadena vacía o solo espacios)
+                    raise ValueError("No se ha escrito nada. Por favor, introduce si o no.")
+                
+                if option == "si":
+                     Suscription().suscription(name, mail, game)
+                  
+                if option == "no":
+                    print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")
+                    break       
+            except ValueError as error:
+                print (error)
+
+        
+    def user(self):
         
         name = input (f"introduce tu nombre:")
+        mail = input (f"introduce tu correo electronico:")
         games = Suscription().suscriptorgames(name)
+        gameprice = Database().findprice(games)
         
-        print (f"el juego al que estas suscrito es {games} ")
+        print (f"el juego al que estas suscrito es {games} con un precio de {gameprice}€")
+        while True:
+            try:
+                option = input(f"¿Deseas buscar otro juego? ")
 
+                if not option.strip():  # Si no se escribe nada (cadena vacía o solo espacios)
+                    raise ValueError("No se ha escrito nada. Por favor, introduce si o no.")
+                
+                if option == "si":
+                    self.user_search(name, mail)
+                    break 
+                if option == "no":
+                    print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")
+                    break       
+            except ValueError as error:
+                print (error)
 
+              
 class Notuser():
 
     def searchgames(self):
@@ -19,7 +62,7 @@ class Notuser():
         try:
             game_to_find = input("introduce el juego que deseas buscar: ")
         except ValueError:
-            print(f"El juego que buscas no existe o está mal escrito")
+            print(f"Debes escribir algo en este campo")
             exit()
 
         pricegame = datas_games().gamesforuser(game_to_find)
@@ -47,6 +90,7 @@ class Notuser():
         
         if selection == "no":
             print("Gracias por usar el nuestro buscador.")
+
 
 class Menu():
      
