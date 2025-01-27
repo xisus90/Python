@@ -18,7 +18,28 @@ class Database:
         self._cursor = self._connection.cursor()
 
 
-    def data_db(self, gametitle, gameprice):
+    def data_db(self, list_titles, list_prices):
+
+        list_titles = [title.strip() for title in list_titles]
+        min_length = min(len(list_titles), len(list_prices))
+
+  
+        for p in range(min_length):
+
+            current_title = list_titles[p]
+            current_price = float(list_prices[p])
+
+            self._cursor.execute(""" SELECT Gamesnames, Gamesprices, date
+                                    FROM games
+                                    WHERE Gamesnames = %s""", (current_title,))
+            result = self._cursor.fetchone()
+
+            if result:
+                db_price = float(result[1])
+                if current_price < db_price:
+                    print (f"el juego {current_title} tiene un precio menor\n el precio actual es {list_prices[p]}€ y el precio anterior es {db_price}€")
+                if db_price == current_price:
+                    print (f"el precio del juego {current_title} es igual")
 
         #actual_date = date.today()
         #data_to_insert = [(title, price, actual_date) for title, price in zip(gametitle, gameprice)]
@@ -30,24 +51,6 @@ class Database:
 
         #self._connection.commit()
         #print("datos insertados correctamente")
-
-        self._cursor.execute(" SELECT Gamesnames, Gamesprices, date FROM games ")
-        results = self._cursor.fetchall()
-
-
-        gameprice = [float(price) for price in gameprice]
-
-        min_length = min(len(results), len(gameprice))
-
-        for i in range(min_length):
-
-            db_price = float(results[i][1])
-
-            if db_price < gameprice[i]:
-                print (f"el juego {gametitle[i]} tiene un precio menor\n el precio actual es {gameprice[i]}€ y el precio anterior es {db_price}€")
-            if db_price == gameprice[i]:
-                print (f"el precio del juego {gametitle[i]} es igual")
-
 
         self._cursor.close()
         self._connection.close()
@@ -84,8 +87,8 @@ class ScarpGames:
             for game_price in game_prices:
                 price_text = game_price.text.split()
                 cleaned_price_text = ' '.join(price_text)
-                self._data_prices.append(cleaned_price_text)   
-
+                self._data_prices.append(cleaned_price_text)
+          
 
 
 ScarpGames().search()

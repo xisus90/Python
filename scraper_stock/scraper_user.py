@@ -34,7 +34,7 @@ class users():
         
         name = input (f"introduce tu nombre:")
         mail = input (f"introduce tu correo electronico:")
-        games = Suscription().suscriptorgames(name)
+        games = Suscription().suscriptorgames(name, mail)
         gameprice = Database().findprice(games)
         
         print (f"el juego al que estas suscrito es {games} con un precio de {gameprice}€")
@@ -65,7 +65,7 @@ class Notuser():
             print(f"Debes escribir algo en este campo")
             exit()
 
-        pricegame = datas_games().gamesforuser(game_to_find)
+        pricegame = datas_games().pricegames(game_to_find)
         
         print(f"el precio del juego {game_to_find} es de {pricegame}€\n")
 
