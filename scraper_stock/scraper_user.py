@@ -21,7 +21,11 @@ class users():
                     raise ValueError("No se ha escrito nada. Por favor, introduce si o no.")
                 
                 if option == "si":
-                     Suscription().suscription(name, mail, game)
+                    games = Suscription().suscriptorgames(name, mail)
+                    if games == game:
+                        print("Ya estas suscrito a ese juego")
+                    if games != game:
+                        Database().update_db_user(name, mail, game)
                   
                 if option == "no":
                     print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")
@@ -32,12 +36,18 @@ class users():
         
     def user(self):
         
-        name = input (f"introduce tu nombre:")
-        mail = input (f"introduce tu correo electronico:")
+        games = []
+        name = input (f"introduce tu nombre:").strip()
+        mail = input (f"introduce tu correo electronico:").strip()
         games = Suscription().suscriptorgames(name, mail)
-        gameprice = Database().findprice(games)
-        
-        print (f"el juego al que estas suscrito es {games} con un precio de {gameprice}€")
+
+        if games:
+            games = games.split(", ")
+
+            for game in games:
+                gameprices = Database().findprice(game)
+                print(f"Estas suscrito al juego {game}: {gameprices}€")
+
         while True:
             try:
                 option = input(f"¿Deseas buscar otro juego? ")

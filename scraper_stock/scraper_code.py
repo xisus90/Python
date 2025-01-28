@@ -1,8 +1,10 @@
+from send_mails import AutoMails
 import re
-import pymysql
 import requests
 from bs4 import BeautifulSoup
+import pymysql
 from datetime import date
+
 
 class Database:
     
@@ -25,7 +27,6 @@ class Database:
 
   
         for p in range(min_length):
-
             current_title = list_titles[p]
             current_price = float(list_prices[p])
 
@@ -37,9 +38,9 @@ class Database:
             if result:
                 db_price = float(result[1])
                 if current_price < db_price:
-                    print (f"el juego {current_title} tiene un precio menor\n el precio actual es {list_prices[p]}€ y el precio anterior es {db_price}€")
-                if db_price == current_price:
-                    print (f"el precio del juego {current_title} es igual")
+                    AutoMails.Mails_to_users(current_title, current_price, db_price)
+                #if db_price == current_price:
+                #    print (f"el precio del juego {current_title} es igual")
 
         #actual_date = date.today()
         #data_to_insert = [(title, price, actual_date) for title, price in zip(gametitle, gameprice)]
@@ -54,6 +55,7 @@ class Database:
 
         self._cursor.close()
         self._connection.close()
+
 
 class ScarpGames:
 
@@ -89,6 +91,5 @@ class ScarpGames:
                 cleaned_price_text = ' '.join(price_text)
                 self._data_prices.append(cleaned_price_text)
           
-
 
 ScarpGames().search()
