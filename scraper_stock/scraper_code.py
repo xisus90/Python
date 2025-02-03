@@ -35,10 +35,10 @@ class Database:
                                     WHERE Gamesnames = %s""", (current_title,))
             result = self._cursor.fetchone()
 
-            if result:
-                db_price = float(result[1])
-                if current_price < db_price:
-                    AutoMails.Mails_to_users(current_title, current_price, db_price)
+            #if result:
+            #    db_price = float(result[1])
+            #    if current_price < db_price:
+            #        AutoMails.Mails_to_users(current_title, current_price, db_price)
                 #if db_price == current_price:
                 #    print (f"el precio del juego {current_title} es igual")
 

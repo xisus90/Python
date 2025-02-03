@@ -10,10 +10,12 @@ class AutoMails:
         
         user = Database().user_to_game(title)
 
-        if user:
-            users = [item for u in user for item in u.split(", ")]
-            cleaned_user = str(users).replace("[", "").replace("]", "").replace("'", "")
-            print(f"El usuario {cleaned_user} está suscrito al juego: {title}")
+        if not user:
+            return None
+
+        users = [item for u in user for item in u.split(", ")]
+        cleaned_user = str(users).replace("[", "").replace("]", "").replace("'", "")
+        print(f"El usuario {cleaned_user} está suscrito al juego: {title}")
         
         #sender_mail = "xisus90@gmail.com"
         #receiver_mail = ""
