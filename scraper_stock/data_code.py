@@ -1,122 +1,115 @@
 import pymysql
 import csv
-from typing import Optional
+from typing import Optional, Any
 
 class Database:
     
     def __init__(self):
+        """Inicializa la conexión a la base de datos."""
         self._connection = pymysql.connect(
-        host="localhost", 
-        user="root",
-        password="root",
-        db="gamelist"
+            host="localhost", 
+            user="root",
+            password="root",
+            db="gamelist"
         )
-         
         self._cursor = self._connection.cursor()
 
     def close(self):
-        self._cursor.close()
-        self._connection.close()
-        print("conexion cerrada")
+        """Cierra la conexión y el cursor de manera segura."""
+        if self._cursor:
+            self._cursor.close()
+        if self._connection:
+            self._connection.close()
+        print("Conexión cerrada correctamente.")
 
+    def __del__(self):
+        """Asegura que la conexión se cierre cuando el objeto sea eliminado."""
+        self.close()
+
+    def execute_query(self, query: str, params: tuple = (), fetch_one=False, fetch_all=False) -> Any:
+        """Ejecuta una consulta de manera segura y devuelve los resultados si es necesario."""
+        try:
+            self._cursor.execute(query, params)
+            if fetch_one:
+                return self._cursor.fetchone()
+            if fetch_all:
+                return self._cursor.fetchall()
+            self._connection.commit()  # Para INSERT, UPDATE, DELETE
+            return None
+        except pymysql.MySQLError as e:
+            print(f"Error en la consulta SQL: {e}")
+            return None
 
     def findprice(self, game: str) -> Optional[float]:
-        
-        self._cursor.execute("SELECT Gamesprices FROM games WHERE Gamesnames = %s", (game))
-        result = self._cursor.fetchone()
+        """Busca el precio de un juego."""
+        result = self.execute_query(
+            "SELECT Gamesprices FROM games WHERE Gamesnames = %s", (game,), fetch_one=True
+        )
+        return result[0] if result else None
 
-        if not result:
-            return None
-        return result[0] 
-    
-
-    def mail_exists(self, mail) -> bool:
-        mail = mail.strip().lower()
-        self._cursor.execute("SELECT EmailUser FROM users WHERE EmailUser = %s", (mail,))
-        result = self._cursor.fetchone()
-
+    def mail_exists(self, mail: str) -> bool:
+        """Verifica si un email está registrado."""
+        result = self.execute_query(
+            "SELECT EmailUser FROM users WHERE EmailUser = %s", (mail,), fetch_one=True
+        )
         return bool(result)
-    
 
-    def new_user(self, mail, game):
-    
-        if not self.mail_exists(mail):
+    def new_user(self, mail: str, game: str):
+        """Registra un nuevo usuario si no existe."""
+        if self.mail_exists(mail):
             print("El email ya existe.")
             return None
 
-        self._cursor.execute("""INSERT INTO users (EmailUser, GameName)
-                                VALUES (%s, %s)""", (mail, game))
-        
-        print("usuario suscrito correctamente")
-        self._connection.commit()
-        
+        self.execute_query(
+            "INSERT INTO users (EmailUser, GameName) VALUES (%s, %s)", (mail, game)
+        )
+        print("Usuario suscrito correctamente.")
 
+    def get_game_for_user(self, mail: str):
+        """Obtiene todos los juegos asociados a un correo."""
+        results = self.execute_query(
+            "SELECT GameName FROM users WHERE EmailUser = %s", (mail,), fetch_all=True
+        )
+        return [result[0] for result in results] if results else None
 
-    def get_game_for_user(self, mail):
-        mail = mail.strip().lower()
-        self._cursor.execute("SELECT GameName FROM users WHERE EmailUser = %s", (mail,))
-        results = self._cursor.fetchall()
+    def user_to_game(self, game: str):
+        """Obtiene todos los usuarios suscritos a un juego."""
+        results = self.execute_query(
+            "SELECT EmailUser FROM users WHERE GameName = %s", (game,), fetch_all=True
+        )
+        return [result[0] for result in results] if results else None
 
-        if not results:
-            self.close()
-            return None
-        game_list = [result[0] for result in results]
-
-        self.close()
-        return game_list 
-
-    
-    def user_to_game(self, game):
-        game = game.strip().lower()
-        self._cursor.execute("SELECT EmailUser FROM users WHERE GameName = %s", (game,))
-        results = self._cursor.fetchall()
-
-
-        if not results:
-            return None
-        return results[0]
-
-
-    def update_db_user(self, mail, game):
-
-        update = """
-        UPDATE users
-        SET GameName = CONCAT(GameName, ', ', %s)
-        WHERE EmailUser = %s
-             """
-        
-        self._cursor.execute(update, (game, mail))
-        self._connection.commit() 
+    def update_db_user(self, mail: str, game: str):
+        """Añade un juego a la lista de juegos de un usuario."""
+        self.execute_query(
+            """UPDATE users
+               SET GameName = CONCAT(GameName, ', ', %s)
+               WHERE EmailUser = %s""",
+            (game, mail)
+        )
         print(f"Juego añadido correctamente al usuario {mail}.")
 
+# ------------------- CLASES QUE USAN DATABASE -------------------
 
 class SuscriptionsMenu:
     def __init__(self):
         self._data = Database()
-        
 
-    def suscription(self, mail, game):
+    def suscription(self, mail: str, game: str):
+        """Añade una suscripción de usuario a un juego."""
         self._data.new_user(mail, game)
-        self._data.close()
-    
-    def suscriptorgames(self, mail):
-        if not self._data.mail_exists(mail):
-               return None
-        #self._data.close()
+
+    def suscriptorgames(self, mail: str):
+        """Devuelve todos los juegos suscritos por un usuario."""
         return self._data.get_game_for_user(mail)
-    
 
 class ActionGetPrice:
-
     def __init__(self):
-       self._data = Database()
+        self._data = Database()
 
-
-    def Execute(self, game):
-        gameprice = self._data.findprice(game)
-
-        self._data.close()
-        return gameprice
+    def Execute(self, game: str) -> Optional[float]:
+        """Obtiene el precio de un juego."""
+        return self._data.findprice(game)
     
 
 
