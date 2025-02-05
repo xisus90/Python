@@ -4,11 +4,11 @@ import requests
 from bs4 import BeautifulSoup
 import pymysql
 from datetime import date
-from data_code import DatabaseUserGames
+from data_code import Database_UserGames
 from dataclasses import dataclass
 
 
-class DatabaseScraper:
+class Database_Scraper:
     
     def __init__(self):
         
@@ -40,7 +40,7 @@ class DatabaseScraper:
             if result:
                 db_price = float(result[1])
                 if current_price < db_price:
-                    mails_for_game = DatabaseUserGames().get_mail_for_game(current_title)
+                    mails_for_game = Database_UserGames().get_mail_for_game(current_title)
                     print(mails_for_game)
                     #AutoMails.Sendmail(mails_for_game, current_title, current_price, db_price)
 
@@ -69,7 +69,7 @@ class Game:
 class ScarpGames:
 
     def __init__(self):
-            self._database = DatabaseScraper()
+            self._database = Database_Scraper()
             self._data_titles = []
             self._data_prices = []
 

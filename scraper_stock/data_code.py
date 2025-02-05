@@ -2,7 +2,7 @@ import pymysql
 import csv
 from typing import Optional, Any
 
-class DatabaseUserGames:
+class Database_UserGames:
     
     def __init__(self):
 
@@ -113,7 +113,7 @@ class DatabaseUserGames:
 class SuscriptionsMenu:
 
     def __init__(self):
-        self._data = DatabaseUserGames()
+        self._data = Database_UserGames()
 
     def suscriptorgames(self, mail: str):
 
@@ -157,7 +157,7 @@ class SuscriptionsMenu:
 class ActionGetPrice:
 
     def __init__(self):
-        self._data = DatabaseUserGames()
+        self._data = Database_UserGames()
 
 
     def Execute(self, game: str) -> Optional[float]:

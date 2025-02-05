@@ -6,6 +6,8 @@ from data_code import Database
 
 class AutoMails:
   
+    def __init__(self):
+        pass
 
     def Sendmail(self, mails, current_title, current_price, db_price):
     # 📌 Configurar credenciales del correo
