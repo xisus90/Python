@@ -13,21 +13,20 @@ class users():
                     print("No se ha escrito nada en el valor nombre")
         print (f"el juego es {game} tiene un precio de {gameprice}€")
 
-        while True:
-            try:
-                option = input(f"¿Deseas suscribirte al juego? ")
+        try:
+            option = input(f"¿Deseas suscribirte al juego? ")
 
-                if option == "si":
-                    games = SuscriptionsMenu().suscriptorgames(mail)
-                    if games == game:
-                        print("Ya estas suscrito a ese juego")
-                    if games != game:
-                        Database().update_db_user(mail, game)
-                  
-                if option == "no":
-                    print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")     
-            except ValueError:
-                print ("error el campo está vacio")
+            if option == "si":
+                games = SuscriptionsMenu().suscriptorgames(mail)
+                if games == game:
+                    print("Ya estas suscrito a ese juego")
+                if games != game:
+                    Database().update_db_user(mail, game)
+                
+            if option == "no":
+                print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")     
+        except ValueError:
+            print ("error el campo está vacio")
 
         
     def user(self):
@@ -46,7 +45,8 @@ class users():
                 if option == "si":
                     self.user_search(mail) 
                 if option == "no":
-                    print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")   
+                    print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")
+                    exit()   
             except ValueError:
                 print ("error campo vacio")
                 exit()

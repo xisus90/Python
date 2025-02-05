@@ -43,7 +43,7 @@ class Database:
     def findprice(self, game: str) -> Optional[float]:
         """Busca el precio de un juego."""
         result = self.execute_query(
-            "SELECT Gamesprices FROM games WHERE Gamesnames = %s", (game,), fetch_one=True
+            "SELECT Gamesprices FROM games WHERE Gamesnames LIKE  %s", (f"%{game}%",), fetch_one=True
         )
         return result[0] if result else None
 
