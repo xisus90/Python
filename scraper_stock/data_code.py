@@ -166,21 +166,6 @@ class ActionGetPrice:
         return self._data.findprice(game)
     
 
-
-
-#class ActionAlertWhenPriceIsCheaper:
-#    def __init__(self, data, mail_client):
-#        self._data = data
-#        self._mail_client = mail_client
-
-#    def Execute(self, game, price):
-#        suscritors = self._data.getAllSuscritors(game)
-#        self._data.close()
-
-#        for suscriptor in suscritors:
-#            self._mail_client.send_mail(suscriptor, f"El juego {game} ha bajado de precio a {price}€.")
-
-
 #class MockDataBase():
 #    def getAllSuscritors(self, game):
 #        return ["pepe@gmail.com", "secon@gmail.com"]
