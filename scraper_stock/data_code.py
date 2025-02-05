@@ -95,21 +95,6 @@ class Database_UserGames:
         return [result[0] for result in results] if results else None
 
 
-    #def update_db_user(self, mail: str, game: str):
-
-    #    """Añade un juego a la lista de juegos de un usuario."""
-    #
-
-    #    self.execute_query(
-    #        """UPDATE users
-    #           SET GameName = CONCAT(GameName, ', ', %s)
-    #           WHERE EmailUser = %s""",
-    #        (game, mail)
-    #    )
-    #    print(f"Juego añadido correctamente al usuario {mail}.")
-
-# ------------------- CLASES QUE USAN DATABASE -------------------
-
 class SuscriptionsMenu:
 
     def __init__(self):
@@ -151,7 +136,6 @@ class SuscriptionsMenu:
         self.check_max_suscriptions(mail)
         self.check_is_user_already_have_game(mail, game)
         self._data.new_user(mail, game)
-
 
 
 class ActionGetPrice:
