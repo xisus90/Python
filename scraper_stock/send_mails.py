@@ -1,55 +1,67 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from data_code import Database
-
 
 class AutoMails:
   
     def __init__(self):
         pass
 
-    def Sendmail(self, mails, current_title, current_price, db_price):
-    # 📌 Configurar credenciales del correo
-        SMTP_SERVER = "smtp.gmail.com"  # Servidor SMTP de Gmail
-        SMTP_PORT = 587  # Puerto de salida (587 es estándar para TLS)
+    def Sendmail(mails, current_title, current_price, db_price):
+        """Envía un correo a los usuarios suscritos cuando el precio de un juego baja."""
+
+        # Configurar credenciales del correo
+        SMTP_SERVER = "smtp.gmail.com"
+        SMTP_PORT = 587
         EMAIL_SENDER = "krukasd90@gmail.com"  # Cambia esto por tu correo
-        EMAIL_PASSWORD = "!123456@"  # Cambia esto por tu contraseña o contraseña de aplicación
+        EMAIL_PASSWORD = "swvh utym onkh gzxp"  # Usa una contraseña de aplicación
 
+        # 🔹 Asegurar que `mails` es una lista válida de correos
+        if isinstance(mails, str):  
+            mails = [mails]  # Convertir en lista si es un solo correo
 
-        while len(AutoMails):
-            # 📌 Asunto y cuerpo del correo
-            subject = "¡Saludos desde Python!"
-            body = f"""
-            Hola, El juego {current_title} al que estás suscrito ha bajado su precio ha {current_price}€ el su 
-            anterior precio era de {db_price}€
-            Saludos
-            """
+        if not mails:
+            print("⚠️ No hay destinatarios para enviar el correo.")
+            return
 
-            # 📌 Lista de destinatarios
-            EMAIL_RECEIVERS = mails
+        print("📧 Enviando correo a:", ", ".join(mails))
 
-            # 📌 Construir el mensaje
-            msg = MIMEMultipart()
-            msg["From"] = EMAIL_SENDER
-            msg["To"] = ", ".join(EMAIL_RECEIVERS)  # Convertir la lista en una cadena separada por comas
-            msg["Subject"] = subject
-            msg.attach(MIMEText(body, "plain"))  # "plain" = texto sin formato (también puedes usar "html")
+        # Asunto y cuerpo del correo
+        subject = "¡El precio de tu juego ha bajado!"
+        body = f"""
+        Hola,
 
-            try:
-                # 📌 Conectar al servidor SMTP
-                server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-                server.starttls()  # Habilitar TLS
-                server.login(EMAIL_SENDER, EMAIL_PASSWORD)  # Autenticación
+        El juego '{current_title}', al que estás suscrito, ha bajado de precio.
 
-                # 📌 Enviar el correo a todos los destinatarios
-                server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())
+        🔻 Nuevo precio: {current_price}€
+        📌 Precio anterior: {db_price}€
 
-                print("✅ Correo enviado correctamente a todos los destinatarios.")
+        ¡Aprovecha la oferta!
 
-                # 📌 Cerrar la conexión
-                server.quit()
+        Saludos,
+        El equipo de notificaciones de precios
+        """
 
-            except Exception as e:
-                print(f"❌ Error al enviar el correo: {e}")
+        # Construir el mensaje
+        msg = MIMEMultipart()
+        msg["From"] = EMAIL_SENDER
+        msg["To"] = ", ".join(mails)  # Convertir la lista en una cadena separada por comas
+        msg["Subject"] = subject
+        msg.attach(MIMEText(body, "plain"))  # "plain" = texto sin formato
 
+        try:
+            # Conectar al servidor SMTP
+            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+            server.starttls()  # Habilitar TLS para conexión segura
+            server.login(EMAIL_SENDER, EMAIL_PASSWORD)  # Autenticación
+
+            # Enviar el correo a todos los destinatarios
+            server.sendmail(EMAIL_SENDER, mails, msg.as_string())
+
+            print("✅ Correo enviado correctamente.")
+
+        except Exception as e:
+            print(f"❌ Error al enviar el correo: {e}")
+
+        finally:
+            server.quit()  # Cerrar conexión SMTP siempre, sin importar si hubo error o no

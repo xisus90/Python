@@ -2,6 +2,7 @@ import pymysql
 import csv
 from typing import Optional, Any
 
+
 class Database_UserGames:
     
     def __init__(self):
@@ -23,7 +24,7 @@ class Database_UserGames:
             self._cursor.close()
         if self._connection:
             self._connection.close()
-        print("Conexión cerrada correctamente.")
+ 
 
 
     def __del__(self):
@@ -77,8 +78,7 @@ class Database_UserGames:
 
 
     def get_mail_for_game(self, game: str):
-
-        """Obtiene todos los juegos asociados a un correo."""
+        """Obtiene todos los correos electrónicos asociados a un juego."""
         results = self.execute_query(
             "SELECT EmailUser FROM users WHERE GameName = %s", (game,), fetch_all=True
         )
