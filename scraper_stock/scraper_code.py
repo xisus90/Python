@@ -4,9 +4,11 @@ import requests
 from bs4 import BeautifulSoup
 import pymysql
 from datetime import date
+from data_code import DatabaseUserGames
+from dataclasses import dataclass
 
 
-class Database:
+class DatabaseScraper:
     
     def __init__(self):
         
@@ -35,12 +37,13 @@ class Database:
                                     WHERE Gamesnames = %s""", (current_title,))
             result = self._cursor.fetchone()
 
-            #if result:
-            #    db_price = float(result[1])
-            #    if current_price < db_price:
-            #        AutoMails.Mails_to_users(current_title, current_price, db_price)
-                #if db_price == current_price:
-                #    print (f"el precio del juego {current_title} es igual")
+            if result:
+                db_price = float(result[1])
+                if current_price < db_price:
+                    mails_for_game = DatabaseUserGames().get_mail_for_game(current_title)
+                    print(mails_for_game)
+                    #AutoMails.Sendmail(mails_for_game, current_title, current_price, db_price)
+
 
         #actual_date = date.today()
         #data_to_insert = [(title, price, actual_date) for title, price in zip(gametitle, gameprice)]
@@ -57,17 +60,23 @@ class Database:
         self._connection.close()
 
 
+@dataclass
+class Game:
+    title: str
+    price: float
+
+
 class ScarpGames:
 
     def __init__(self):
-        
+            self._database = DatabaseScraper()
             self._data_titles = []
             self._data_prices = []
 
     def search(self):
    
         self.Lookingdataprice()
-        Database().data_db(self._data_titles, self._data_prices)
+        self._database.data_db(self._data_titles, self._data_prices)
         
     def Lookingdataprice(self):
  

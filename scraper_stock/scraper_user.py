@@ -1,5 +1,4 @@
 from data_code import ActionGetPrice
-from data_code import Database 
 from data_code import SuscriptionsMenu
 
 class users():
@@ -7,48 +6,62 @@ class users():
     def user_search(self, mail):
 
         try:
-            game = input(f"¿Escribe el nombre del juego que deseas buscar? ")
-            gameprice = Database().findprice(game)
-        except ValueError:
-                    print("No se ha escrito nada en el valor nombre")
-        print (f"el juego es {game} tiene un precio de {gameprice}€")
+            game = input("Escribe el nombre del juego que deseas buscar: ").strip()
+
+            if not game:  # Si el usuario no escribe nada
+                raise ValueError("No se ha escrito nada en el valor nombre")
+
+            game_info = ActionGetPrice().Execute(game)  # Busca el juego
+
+            if game_info:
+                game_name, game_price = game_info  # Desempaquetar la tupla
+                print(f"El juego es {game_name} y tiene un precio de {game_price}€")
+            else:
+                print("No se encontró el juego.")
+
+        except ValueError as e:
+            print(e)
 
         try:
             option = input(f"¿Deseas suscribirte al juego? ")
-
+            if not option:  # Si el usuario no escribe nada
+                raise ValueError("No se ha escrito nada en el valor")
+            
             if option == "si":
                 games = SuscriptionsMenu().suscriptorgames(mail)
                 if games == game:
                     print("Ya estas suscrito a ese juego")
                 if games != game:
-                    Database().update_db_user(mail, game)
+                    SuscriptionsMenu().suscription(mail, game)
                 
             if option == "no":
                 print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")     
-        except ValueError:
-            print ("error el campo está vacio")
+        except ValueError as e:
+            print (e)
 
         
     def user(self):
         
         mail = input (f"introduce tu correo electronico:").strip()
-        games = SuscriptionsMenu().suscriptorgames(mail)
-
-        if games:
-            
-            for game in games:
-                gameprices = ActionGetPrice().Execute(game)
-                print(f"Estas suscrito al juego {game}: {gameprices}€")
-
+        gamesinfo = SuscriptionsMenu().suscriptorgames(mail)
+        
+        if gamesinfo:
+        
+            for game in gamesinfo:
+                game_name, game_price = ActionGetPrice().Execute(game)  # Desempaquetar la tupla
+                print(f"Estás suscrito al juego {game_name}: {game_price}€")
+                
             try:
                 option = input(f"¿Deseas buscar otro juego? ")
+                if not option:  # Si el usuario no escribe nada
+                    raise ValueError("No se ha escrito nada en el valor")
                 if option == "si":
                     self.user_search(mail) 
                 if option == "no":
                     print(f"Gracias por usar nuestro buscador, esperamos verle pronto.")
                     exit()   
-            except ValueError:
-                print ("error campo vacio")
+            except ValueError as e:
+                print (e)
                 exit()
         else:
             print("el juego no estas suscrito a ningún juego")
@@ -58,14 +71,21 @@ class Notuser():
     def searchgames(self):
 
         try:
-            game_to_find = input("introduce el juego que deseas buscar: ")
-        except ValueError:
-            print(f"Debes escribir algo en este campo")
-            exit()
+            game = input("Escribe el nombre del juego que deseas buscar: ").strip()
 
-        pricegame = ActionGetPrice().Execute(game_to_find)
-        
-        print(f"el precio del juego {game_to_find} es de {pricegame}€\n")
+            if not game:  # Si el usuario no escribe nada
+                raise ValueError("No se ha escrito nada en el valor nombre")
+
+            game_info = ActionGetPrice().Execute(game)  # Busca el juego
+
+            if game_info:
+                game_name, game_price = game_info  # Desempaquetar la tupla
+                print(f"El juego es {game_name} y tiene un precio de {game_price}€")
+            else:
+                print("No se encontró el juego.")
+
+        except ValueError as e:
+            print(e)
 
         try:
             selection = input(f"¿deseas suscribirte Se te notificará cuando bajen el precio de los juegos que deseas\n")
@@ -79,7 +99,7 @@ class Notuser():
             except ValueError:
                 print("No se ha escrito nada en el valor del email")
                 exit()
-            SuscriptionsMenu().suscription( Usermail, game_to_find)
+            SuscriptionsMenu().suscription( Usermail, game_name)
         
         if selection == "no":
             print("Gracias por usar el nuestro buscador.")
@@ -101,15 +121,5 @@ class Menu():
         if checking != "si" and checking != "no":
             print ("No se puede dejar el campo en blanco o no se ha escrito correctamente.")
  
-
-        #try:
-        #    selection = input(f"¿deseas crear una tabla con todos los juegos por precios y fecha?\n")
-        #    if selection == "si":
-        #        Database().grafic()
-        #    if selection != "si":
-        #        exit()
-        #except ValueError:
-        #    exit()
-
 
 Menu().execute()
