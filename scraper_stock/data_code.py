@@ -138,6 +138,7 @@ class SuscriptionsMenu:
         self._data.new_user(mail, game)
 
 
+
 class ActionGetPrice:
 
     def __init__(self):
@@ -150,15 +151,17 @@ class ActionGetPrice:
         return self._data.findprice(game)
     
 
-#class MockDataBase():
-#    def getAllSuscritors(self, game):
-#        return ["pepe@gmail.com", "secon@gmail.com"]
-    
-#class MockMailClient():
-#    def send_mail(self, user, message):
-#        pass
+class ActionAlertWhenPriceIsCheaper:
 
-#ActionAlertWhenPriceIsCheaper(MockDataBase(), MockMailClient()).Execute("Cyberpunk 2077", 50)
+    def __init__(self, database, mail_client):
 
-#MockMailClient.send_mail.assert_called_with("pepe@gmail.com", "El juego Cyberpunk 2077 ha bajado de precio 50€")
-#MockMailClient.send_mail.assert_called_with("secon@gmail.com", "El juego Cyberpunk 2077 ha bajado de precio 50€")
+        self.database = database
+        self.mail_client = mail_client
+
+    def Execute(self, game, new_price):
+        
+        subscribers = self.database.getAllSubscribers(game)
+
+        for user in subscribers:
+            message = f"El juego {game} ha bajado de precio a {new_price}€"
+            self.mail_client.send_mail(user, message)
