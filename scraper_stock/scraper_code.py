@@ -44,27 +44,24 @@ class Database_Scraper:
         print("🔒 Conexión cerrada correctamente.")
 
 
-    def comparate_prices(self, games : List [Game]):
+    def get_datas_from_DB(self) -> dict:
 
+        """Obtiene todos los juegos con sus precios más recientes de la base de datos."""
+        
+        self._cursor.execute("""
+            SELECT Gamesnames, Gamesprices, date
+            FROM games
+            WHERE date = (SELECT MAX(date) FROM games WHERE games.Gamesnames = Gamesnames)
+        """)
+        
+        results = self._cursor.fetchall()  
+        self.close_connection()
 
-        for game in games:
-            current_title = game.title
-            current_price = float(game.price)
-
-            self._cursor.execute(""" SELECT Gamesnames, Gamesprices, date
-                                    FROM games
-                                    WHERE Gamesnames = %s""", (current_title,))
-            result = self._cursor.fetchone()
-
-            if result:
-                db_price = float(result[1])
-                if current_price < db_price:
-                        mails_for_game = Database_UserGames().get_mail_for_game(current_title)
-                        if mails_for_game:
-                                AutoMails.Sendmail(mails_for_game, current_title, current_price, db_price)
-
-        self._connection.close()
-
+        # Convertir resultados a un diccionario para acceso rápido
+        price_dict = {title: float(price) for title, price, _ in results}
+        
+        return price_dict
+        
 
     def actu_db_games(self, games: List[Game]):
 
@@ -120,11 +117,33 @@ class Scraper:
 
         return games  # Retorna la lista de juegos
 
+
+    def compare_price(self, games: List[Game], db_prices: dict):
+        """Compara los precios del scraper con los de la base de datos."""
+        
+        for game in games:
+            current_title = game.title
+            current_price = float(game.price)
+
+            if current_title in db_prices:
+                previous_price = db_prices[current_title]  # ✅ Precio anterior específico
+
+                if current_price < previous_price:
+                    mails_for_game = Database_UserGames().get_mail_for_game(current_title)
+                    if mails_for_game:
+                        print(f""" {mails_for_game} --> juego: {current_title}
+                        """)
+                    AutoMails.Sendmail(mails_for_game, current_title, current_price, previous_price)
+
+
     def execute(self):
 
         games_list = self.Lookingdataprice()
-        self._data_db.actu_db_games(games_list)
-        self._data_db.comparate_prices(games_list)
+        if games_list:
+            pricestocompare = self._data_db.get_datas_from_DB()
+            self.compare_price(games_list, pricestocompare)
+            #self._data_db.actu_db_games(games_list)
+            
 
 
 Scraper().execute()
