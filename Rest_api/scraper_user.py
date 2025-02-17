@@ -3,7 +3,9 @@ import requests
 API_URL = "http://127.0.0.1:5000"
 
 class Menu:
+
     def show_menu(self):
+
         try:
             response = requests.get(f"{API_URL}/usuarios")
             menu_opciones = response.json()
@@ -23,15 +25,17 @@ class Menu:
                     print("❌ Opción no válida. Intenta de nuevo.")
                     continue
 
-                # Enviar la opción al servidor y manejar la respuesta
-                response = requests.post(f"{API_URL}/procesar_opcion", json={"opcion": str(option)})
+                if option == 1:
+                    email = input("Introduce tu correo electrónico: ")
+                    response = requests.post(f"{API_URL}/register_user", json={"email": str(email)})
 
-                if response.status_code == 200:
-                    print(response.json())  # Ahora imprimirá {"mensaje": "Has seleccionado registrar un usuario."}
+                if option == 2:
+                    game = input("introduce el juego que deseas buscar")
+                    response = requests.post(f"{API_URL}/search_game", json={"game": str(game)})
+ 
                 else:
                     print(f"⚠️ Error en la respuesta del servidor: {response.status_code}")
 
-                # Si el usuario elige la opción 3, salir del bucle
                 if option == 3:
                     print(" Saliendo del programa. ¡Hasta luego!")
                     break

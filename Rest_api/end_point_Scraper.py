@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -12,24 +13,18 @@ def obtener_menu():
     }
     return jsonify(menu_opciones)
 
-# ✅ Procesar la opción seleccionada
-@app.route('/procesar_opcion', methods=['POST'])
-def procesar_opcion():
+
+@app.route('/register_user', methods=['POST'])
+def register_users():
     data = request.json
-    opcion = data.get("opcion")
+    email = data.get("email")
+    
+    if not email:
+            return jsonify({"error": "El nombre de usuario y el correo electrónico son obligatorios."}), 400
 
-    if opcion == "1":
-        print("Has seleccionado registrar un usuario.")
-        return jsonify({"mensaje": "Has seleccionado registrar un usuario."})
-    if opcion == "2":
-        print("Has seleccionado buscar un juego.")
-        return jsonify({"mensaje": "🎮 Has seleccionado buscar un juego."})
-    if opcion == "3":
-        print("Saliendo del programa. ¡Hasta luego!")
-        return jsonify({"mensaje": "🚪 Saliendo del programa. ¡Hasta luego!"})
+    print(f"Registrando el email: {email}")
 
-    # Manejo de error si la opción es inválida
-    return jsonify({"error": "Opción inválida"}), 400
+    return jsonify({f" El mail {email} ha sido registrado correctamente!"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
