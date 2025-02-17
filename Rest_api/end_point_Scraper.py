@@ -19,14 +19,18 @@ def procesar_opcion():
     opcion = data.get("opcion")
 
     if opcion == "1":
-        print(f" Has seleccionado registrar un usuario.")
-        return jsonify({" Has seleccionado registrar un usuario."})
+        print("Has seleccionado registrar un usuario.")
+        return jsonify({"mensaje": "Has seleccionado registrar un usuario."})
     if opcion == "2":
-        print()
-        return jsonify({"🎮 Has seleccionado buscar un juego."})
+        print("Has seleccionado buscar un juego.")
+        return jsonify({"mensaje": "🎮 Has seleccionado buscar un juego."})
     if opcion == "3":
-        return jsonify({"🚪 Saliendo del programa. ¡Hasta luego!"})
+        print("Saliendo del programa. ¡Hasta luego!")
+        return jsonify({"mensaje": "🚪 Saliendo del programa. ¡Hasta luego!"})
 
+    # Manejo de error si la opción es inválida
+    return jsonify({"error": "Opción inválida"}), 400
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
+
