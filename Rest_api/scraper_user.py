@@ -4,6 +4,48 @@ import requests
 API_URL = "http://127.0.0.1:5000"
 
 class Menu:
+    
+    def __init__(self):
+        self.api_url = API_URL
+
+    def login(self, account):
+        login = requests.post(f"{self.api_url}/login_user", json={"account": str(account)})
+
+        if login.status_code != 200:
+            print(f"Error: {login.status_code} - {login.text}")  # Manejo de errores
+        if login.status_code == 200:
+            data = login.json()
+
+            games = data.get('games')  
+
+            if games:
+                return games
+                print(f"{games} ")
+            else:
+                print("No se encontraron juegos asociados a este correo.")
+
+
+    def search(self, game):
+        
+        search = requests.post(f"{self.api_url}/search_game", json={"game": str(game)})
+                            
+        if search.status_code != 200:
+            print(f"Error: {search.status_code} - {search.text}")  # Manejo de errores   
+
+        if search.status_code == 200:
+            data = search.json() 
+            game_name = data.get('GameName')
+            game_price = data.get('GamePrice')
+            print(f"{game_name}: {game_price}€\n")
+
+
+    def register(self, email):
+
+        register = requests.post(f"{self.api_url}/register_user", json={"email": str(email), "game" : str(game_name)})
+        data = register.json()
+        acction = data.get('message')
+        print(acction)
+
 
     print (f"")
 
@@ -28,35 +70,26 @@ class Menu:
                 continue
 
             if option == 1:
-
-                acount = input("Introduce tu correo electronico:")
-                response = requests.post(f"{API_URL}/login_user", json = {"acount": str(acount)} )
-                #result = requests.get(f"{API_URL}/search_game" , params = {""})
-
-                print ("""Al registrarte como usuario podrás recibir notificaciones de la bajada 
-                       de precios de los juegos a los que estas suscrito""")
-                email = input("Introduce un correo electrónico: ")
-                response = requests.post(f"{API_URL}/register_user", json={"email": str(email)})
-  
+                account = input("Introduce tu correo electronico: ")
+                games_user = self.login(account)
+                for game in games_user:    
+                    prices_games_user = self.search(game)
+                    print (f"Estas suscrito a {game} {prices_games_user}€")
+                    break
 
             if option == 2:
-              game = input("Introduce el juego que deseas buscar:\n")
-            response = requests.post(f"{API_URL}/search_game", json={"game": str(game)})
+                game = input("Introduce el juego que deseas buscar:\n")
+                search_game = self.search(game)
+                print ("""Al registrarte como usuario podrás recibir notificaciones de la bajada de precios de los juegos a los que estas suscrito""")
+                select = input("Deseas suscribirte?(si/no):")
 
-            if response.status_code == 200:
-                data = response.json() 
-                game_name = data.get('GameName')
-                game_price = data('GamePrice')
-                print(f"{game_name}: {game_price}€")
-            else:
-                print(f"Error: {response.status_code} - {response.text}")  # Manejo de errores
+                if select == "si":
+                    email = input("Introduce un correo electrónico: ")
+                    self.register(email)
 
-
-            if option == 3:
-                print (f"gracias por usar nuestro buscador")
-
-            else:
-                print(f"⚠️ Error en la respuesta del servidor: {response.status_code}")
+                if select == "no":
+                    print ("Gracias por usar nuestro buscador")
+                    break
 
             if option == 3:
                 print(" Saliendo del programa. ¡Hasta luego!")

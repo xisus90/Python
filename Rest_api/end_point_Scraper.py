@@ -1,20 +1,23 @@
 import requests
 from flask import Flask, jsonify, request
 from Database import DB_Usergames
+import json
 
 app = Flask(__name__)
 
 
 @app.route('/register_user', methods=['POST'])
 def register():
+
     data = request.json
     email = data.get("email")
+    game = data.get("game")
     
     if not email:
         return jsonify({"error": "Faltan parámetros."}), 400
     
     db = DB_Usergames()
-    db.new_user(email)
+    db.new_user(email, game)
 
     return jsonify({"message": "Usuario registrado con éxito!"}), 200
 
@@ -22,22 +25,26 @@ def register():
 @app.route('/login_user', methods=['POST'])
 def login():
     data = request.json
-    email = data.get("email")
+    account = data.get("account")
     
-    if not email:
+    if not account:
         return jsonify({"error": "Faltan parámetros."}), 400
     
     db = DB_Usergames()
-    resultgames = db.get_game_for_user(email)
+    resultgames = db.get_game_for_user(account)
     
-    if resultgames:
-        resultgames = resultgames.get_json()  # Esto extrae la lista de juegos del objeto jsonify
+    # Aquí, ya no necesitas llamar a get_json() porque 'resultgames' ya está en formato JSON
+    if resultgames:  
+        # Procesa los juegos desde 'resultgames' que es una lista de diccionarios
+        games = [game["GameName"] for game in resultgames]
 
-    for result in resultgames:
-        resultprices = db.getprice(result)
-        game_name = resultprices['GameName']
-        game_price = resultprices['GamePrice']
-        print(f"Estas suscrito al juego {game_name}: {game_price}€")
+        # Devuelve la respuesta con los juegos como JSON
+        return jsonify({"games": games})
+
+    # Si no hay juegos o ocurre algún error, también necesitas devolver una respuesta
+    return jsonify({"error": "No games found"}), 400
+
+
 
 
 @app.route('/search_game', methods=['POST'])
@@ -47,15 +54,17 @@ def search():
     
     if not game:
         return jsonify({"error": "Faltan parámetros."}), 400
-    
+
     db = DB_Usergames()  
     getpriceforgame = db.getprice(game)
 
-    if not getpriceforgame or not isinstance(getpriceforgame, dict):
+    game_data = getpriceforgame.get_json()
+
+    if not game_data or not isinstance(game_data, dict):
         return jsonify({"error": "Juego no encontrado o error en la consulta."}), 404
 
-    game_name = getpriceforgame.get("GameName")  # Usamos .get() para evitar KeyError
-    game_price = getpriceforgame.get("GamePrice")
+    game_name = game_data.get("GameName")  # Usamos .get() para evitar KeyError
+    game_price = game_data.get("GamePrice")
 
     return jsonify({"GameName": game_name, "GamePrice": game_price})
 

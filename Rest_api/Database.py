@@ -1,7 +1,6 @@
 import pymysql
 import csv
 from typing import Optional, Any
-import pymysql
 from pymysql.cursors import DictCursor
 from flask import jsonify
 
@@ -60,7 +59,7 @@ class DB_Usergames:
         result = self.execute_query(
             "SELECT Gamesnames, Gamesprices FROM games WHERE Gamesnames LIKE  %s", (f"%{game}%",), fetch_one=True
         )
-
+        
         if result:
             return jsonify({"GameName": result['Gamesnames'], "GamePrice": result['Gamesprices']})
         else:
@@ -74,19 +73,20 @@ class DB_Usergames:
         self.execute_query(
             "INSERT INTO users (EmailUser, GameName) VALUES (%s, %s)", (mail, game)
         )
+
   
-
     def get_game_for_user(self, mail: str):
-
         """Obtiene todos los juegos asociados a un correo."""
         results = self.execute_query(
             "SELECT GameName FROM users WHERE EmailUser = %s", (mail,), fetch_all=True
         )
 
         if results:
-            return jsonify([result['GameName'] for result in results])
+            # Aquí devuelve directamente la lista de resultados, no un Response
+            return [{"GameName": result["GameName"]} for result in results]  # Devuelve una lista de diccionarios
         else:
-            return jsonify([])
+            return []  # Si no hay resultados, devuelve una lista vacía
+
 
     def get_mail_for_game(self, game: str):
         """Obtiene todos los correos electrónicos asociados a un juego."""
@@ -94,6 +94,9 @@ class DB_Usergames:
             "SELECT EmailUser FROM users WHERE GameName = %s", (game,), fetch_all=True
         )
         
+        print(results)
+        breakpoint()
+
         if results:
             return jsonify([result['EmailUser'] for result in results])
         else:
