@@ -11,13 +11,27 @@ def register():
 
     data = request.json
     email = data.get("email")
-    game = data.get("game")
+    register_game = data.get("game")
     
     if not email:
         return jsonify({"error": "Faltan parámetros."}), 400
     
     db = DB_Usergames()
-    db.new_user(email, game)
+
+    resultgames = db.get_game_for_user(email)
+    print(register_game)
+    if resultgames:
+        games = [game["GameName"] for game in resultgames]
+        if len(games) >= 5:
+            print(len(games))
+            return jsonify({"message": "Has excedido el número de suscripciones"}), 200
+            
+    for game in games:
+         print (f" juego de la db{game} --> juego usuario{register_game}")
+         if game == register_game:
+            return jsonify({"message": "Ya estas suscrito a este juego"}), 200
+
+    #db.new_user(email, register_game)
 
     return jsonify({"message": "Usuario registrado con éxito!"}), 200
 
@@ -33,15 +47,12 @@ def login():
     db = DB_Usergames()
     resultgames = db.get_game_for_user(account)
     
-    # Aquí, ya no necesitas llamar a get_json() porque 'resultgames' ya está en formato JSON
     if resultgames:  
-        # Procesa los juegos desde 'resultgames' que es una lista de diccionarios
         games = [game["GameName"] for game in resultgames]
+        print(games)
 
-        # Devuelve la respuesta con los juegos como JSON
         return jsonify({"games": games})
 
-    # Si no hay juegos o ocurre algún error, también necesitas devolver una respuesta
     return jsonify({"error": "No games found"}), 400
 
 

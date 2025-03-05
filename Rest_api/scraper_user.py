@@ -15,14 +15,13 @@ class Menu:
             print(f"Error: {login.status_code} - {login.text}")  # Manejo de errores
         if login.status_code == 200:
             data = login.json()
-
             games = data.get('games')  
 
             if games:
-                return games
-                print(f"{games} ")
+                    return games
             else:
                 print("No se encontraron juegos asociados a este correo.")
+        exit()
 
 
     def search(self, game):
@@ -34,14 +33,12 @@ class Menu:
 
         if search.status_code == 200:
             data = search.json() 
-            game_name = data.get('GameName')
-            game_price = data.get('GamePrice')
-            print(f"{game_name}: {game_price}€\n")
+            return data
 
 
-    def register(self, email):
+    def register(self, email, game):
 
-        register = requests.post(f"{self.api_url}/register_user", json={"email": str(email), "game" : str(game_name)})
+        register = requests.post(f"{self.api_url}/register_user", json={"email": str(email), "game" : str(game)})
         data = register.json()
         acction = data.get('message')
         print(acction)
@@ -74,18 +71,26 @@ class Menu:
                 games_user = self.login(account)
                 for game in games_user:    
                     prices_games_user = self.search(game)
-                    print (f"Estas suscrito a {game} {prices_games_user}€")
-                    break
+                    cleaned_games_user = prices_games_user.get('GameName')
+                    Cleander_prices_user = prices_games_user.get('GamePrice')
+                    print (f"Estas suscrito a {cleaned_games_user} {Cleander_prices_user}€")
+                break
 
             if option == 2:
                 game = input("Introduce el juego que deseas buscar:\n")
                 search_game = self.search(game)
+
+                game_name = search_game.get('GameName')
+                game_price = search_game.get('GamePrice')
+                print(f"{game_name}: {game_price}€\n")
+
                 print ("""Al registrarte como usuario podrás recibir notificaciones de la bajada de precios de los juegos a los que estas suscrito""")
                 select = input("Deseas suscribirte?(si/no):")
 
                 if select == "si":
                     email = input("Introduce un correo electrónico: ")
-                    self.register(email)
+                    print(game_name)
+                    self.register(email,game_name)
 
                 if select == "no":
                     print ("Gracias por usar nuestro buscador")

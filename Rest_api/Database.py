@@ -95,8 +95,7 @@ class DB_Usergames:
         )
         
         print(results)
-        breakpoint()
-
+ 
         if results:
             return jsonify([result['EmailUser'] for result in results])
         else:
