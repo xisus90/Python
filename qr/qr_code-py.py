@@ -1,4 +1,5 @@
 import pandas as pd
+from PIL import Image, ImageDraw, ImageFont
 import qrcode
 import os
 import smtplib
@@ -103,27 +104,47 @@ class QR:
             name = str(self._df["nombre"].iloc[line]).strip()
             mail = str(self._df["mail"].iloc[line]).strip()
 
-            data = f"Nombre: {name}"
-
+            data = name
             qr = qrcode.QRCode(
                 version=1,
                 error_correction=qrcode.constants.ERROR_CORRECT_L,
                 box_size=10,
-                border=4,
+                border=4
             )
             qr.add_data(data)
             qr.make(fit=True)
 
-            img = qr.make_image(fill="black", back_color="white")
+            qr_img = qr.make_image(fill="black", back_color="white").convert("RGB")  # 🔥 Convertir a RGB
+            qr_width, qr_height = qr_img.size
+
+            text = f"{data}"
+            font = ImageFont.truetype("arial.ttf", 30)
+
+            text_bbox = font.getbbox(text)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+
+            new_width = qr_width
+            new_height = qr_height + text_height + 10
+            final_img = Image.new("RGB", (new_width, new_height), "white")
+
+            final_img.paste(qr_img, (0, 0))
+            draw = ImageDraw.Draw(final_img)
+
+            text_x = (new_width - text_width) // 2
+            text_y = qr_height - 10
+            draw.text((text_x, text_y), text, fill="black", font=font)
+
+            final_img.save(f"qr_con_codigo_qr_{name}.png")
 
             if mail == "nan":
-                img.save(os.path.join(destiny_Carpet_no_mail, f"codigo_qr_{name}.png"))
+                final_img.save(os.path.join(destiny_Carpet_no_mail, f"codigo_qr_{name}.png"))
                 count_no_mails += 1
             if mail != "nan":
                 count_mails += 1
-                img.save(os.path.join(destiny_Carpet_mail, f"codigo_qr_{name}.png"))
+                final_img.save(os.path.join(destiny_Carpet_mail, f"codigo_qr_{name}.png"))
                 file_name = f"codigo_qr_{name}.png"
-                self.Sendmail(mail, file_name)
+                #self.Sendmail(mail, file_name)
 
         total_count = count_no_mails + count_mails
         print (f"se han guardado un total de {count_mails} QR con mails y {count_no_mails} QR sin mails, total {total_count}")
