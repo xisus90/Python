@@ -31,7 +31,7 @@ class QR:
 
 
     def Sendmail(self, mails, file_name):
-        """Envía un correo a los usuarios suscritos cuando el precio de un juego baja."""
+        """Envía un correo a los usuarios con su respectivo código QR"""
         
         SMTP_SERVER = "smtp.gmail.com"
         SMTP_PORT = 587
@@ -66,9 +66,7 @@ class QR:
             server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
             server.starttls() 
             server.login(EMAIL_SENDER, EMAIL_PASSWORD) 
-
             server.sendmail(EMAIL_SENDER, mails, msg.as_string())
-
             print(f"✅ Correo enviado correctamente. {mails}")
 
         except Exception as e:
