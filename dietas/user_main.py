@@ -44,18 +44,14 @@ except ValueError:
 
 macronutrients = CalculateMacros(WEIGHT, TALL, DAYS, AGE, GENER, METHOD).execute()
 
-<<<<<<< HEAD
+
 print("\n--- RESULTADO PERSONALIZADO DE MACRONUTRIENTES ---\n")
 print(f"✅ Calorías recomendadas totales: {macronutrients.metabolism_Basal} kcal")
 print(f"🍗 Proteínas: {macronutrients.protein} g ({macronutrients.calories_protein} kcal)")
 print(f"🥑 Grasas: {macronutrients.fats} g ({macronutrients.calories_fats} kcal)")
 print(f"🍚 Carbohidratos: {macronutrients.carbs} g ({macronutrients.calories_carbs} kcal)")
-=======
+print("=======")
 print("las calorías recomendadas son: ", macronutrients.metabolism_Basal)
 print("los gramos de proteinas recomendables son: ",macronutrients.protein,"gr con unas calorias de proteinas de ", macronutrients.calories_protein )
 print("los gramos de grasas saludables recomendables son: ",macronutrients.fats,"gr con unas calorias de grasas de ", macronutrients.calories_fats )
 print("los gramos de carbohidratos recomendables son: ",macronutrients.carbs,"gr con unas calorias de carbohidratos de ", macronutrients.calories_carbs )
-
-
- 
->>>>>>> ff26df478692ad1ddebf83324135e22ff88d4f70
