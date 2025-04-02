@@ -52,6 +52,5 @@ print("los gramos de proteinas recomendables son: ",macronutrients.protein,"gr c
 print("los gramos de grasas saludables recomendables son: ",macronutrients.fats,"gr con unas calorias de grasas de ", macronutrients.calories_fats )
 print("los gramos de carbohidratos recomendables son: ",macronutrients.carbs,"gr con unas calorias de carbohidratos de ", macronutrients.calories_carbs )
 
-#buscar algo acerca de excepcions en python 
-#principios solid estudiarlos por encima
+
  
